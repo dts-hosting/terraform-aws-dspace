@@ -186,3 +186,69 @@ module "alb" {
 
   tags = local.tags
 }
+
+module "efs" {
+  source = "terraform-aws-modules/efs/aws"
+
+  for_each = toset(["assetstore", "solr"])
+
+  # File system
+  name      = "${local.name}-${each.key}"
+  encrypted = true
+
+  lifecycle_policy = {
+    transition_to_ia                    = "AFTER_30_DAYS"
+    transition_to_primary_storage_class = "AFTER_1_ACCESS"
+  }
+
+  # File system policy
+  attach_policy                      = true
+  bypass_policy_lockout_safety_check = false
+  deny_nonsecure_transport           = false
+
+  policy_statements = [
+    {
+      sid     = "ClientMount"
+      actions = ["elasticfilesystem:ClientMount"]
+      principals = [
+        {
+          type        = "AWS"
+          identifiers = ["*"]
+        }
+      ]
+    },
+    {
+      sid     = "ClientRootAccess"
+      actions = ["elasticfilesystem:ClientRootAccess"]
+      principals = [
+        {
+          type        = "AWS"
+          identifiers = ["*"]
+        }
+      ]
+    },
+    {
+      sid     = "ClientWrite"
+      actions = ["elasticfilesystem:ClientWrite"]
+      principals = [
+        {
+          type        = "AWS"
+          identifiers = ["*"]
+        }
+      ]
+    }
+  ]
+
+  # Mount targets / security group
+  mount_targets              = { for k, v in zipmap(local.azs, module.vpc.private_subnets) : k => { subnet_id = v } }
+  security_group_description = "EFS security group"
+  security_group_vpc_id      = module.vpc.vpc_id
+  security_group_rules = {
+    vpc = {
+      description = "NFS ingress from VPC"
+      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+    }
+  }
+
+  tags = local.tags
+}
