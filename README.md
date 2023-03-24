@@ -23,10 +23,13 @@ provide a set of general guidelines as implementation details can vary (i.e.
 whether to use public vs. private subnets with a NAT gateway; the specifics
 of how security groups are defined, and so on).
 
-For the `IAM ECS role` the easy option is to assign these prefab policies:
+For the `IAM ECS role` the easy option is to assign these prefab policies to
+a role used by ECS services and autoscaling resources (if applicable):
 
 - AmazonEC2ContainerRegistryReadOnly
+- AmazonEC2ContainerServiceforEC2Role
 - AmazonECS_FullAccess
+- AmazonSSMManagedInstanceCore
 - AmazonSSMReadOnlyAccess
 
 The example project represents one way externally created resources
