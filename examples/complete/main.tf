@@ -1,9 +1,21 @@
+variable "backend_img" {
+  default = "dspace/dspace:dspace-7_x"
+}
+
 variable "certificate_domain" {
   default = "*.dspace.org"
 }
 
+variable "frontend_img" {
+  default = "dspace/dspace-angular:dspace-7_x-dist"
+}
+
 variable "profile" {
   default = "default"
+}
+
+variable "solr_img" {
+  default = "dspace/dspace-solr:dspace-7_x"
 }
 
 provider "aws" {
@@ -30,6 +42,23 @@ locals {
     Example    = local.name
     Repository = "https://github.com/dts-hosting/terraform-aws-dspace"
   }
+}
+
+module "frontend" {
+  source = "../../modules/frontend"
+
+  cluster_id        = module.ecs.cluster_id
+  host              = "${local.name}.dspace.org"
+  img               = var.frontend_img
+  listener_arn      = module.alb.https_listener_arns[0]
+  log_group         = "/aws/ecs/${local.name}"
+  name              = "${local.name}-frontend"
+  namespace         = "/"
+  rest_host         = "${local.name}.dspace.org"
+  rest_namespace    = "/server"
+  security_group_id = module.dspace_sg.security_group_id
+  subnets           = module.vpc.private_subnets
+  vpc_id            = module.vpc.vpc_id
 }
 
 ################################################################################
@@ -136,6 +165,15 @@ module "dspace_sg" {
       protocol    = "tcp"
       description = "Solr access from within VPC"
       cidr_blocks = module.vpc.vpc_cidr_block
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = -1
+      cidr_blocks = "0.0.0.0/0"
     },
   ]
 

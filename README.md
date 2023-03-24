@@ -13,7 +13,6 @@ This module requires (and does not create):
 - An application load balancer assigned to public subnets in the VPC
 - EFS storage for persistent data permitting access from within the VPC
 - ECS cluster / autoscaling group (latter optional if using Fargate)
-- IAM ECS role
 - Postgres database (RDS or other) connection details
 - Solr connection details (or service discovery if using the included module)
 - DNS records (Route53 or other) for publicly accessible DSpace services
@@ -22,15 +21,6 @@ These resources can be created however you like and are broadly defined to
 provide a set of general guidelines as implementation details can vary (i.e.
 whether to use public vs. private subnets with a NAT gateway; the specifics
 of how security groups are defined, and so on).
-
-For the `IAM ECS role` the easy option is to assign these prefab policies to
-a role used by ECS services and autoscaling resources (if applicable):
-
-- AmazonEC2ContainerRegistryReadOnly
-- AmazonEC2ContainerServiceforEC2Role
-- AmazonECS_FullAccess
-- AmazonSSMManagedInstanceCore
-- AmazonSSMReadOnlyAccess
 
 The example project represents one way externally created resources
 can be used with this module.
