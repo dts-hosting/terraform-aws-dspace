@@ -1,1 +1,2 @@
+certificate_domain = "*.dspace.org"
 profile = "default"

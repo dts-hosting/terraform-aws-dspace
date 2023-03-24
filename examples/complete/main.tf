@@ -1,3 +1,7 @@
+variable "certificate_domain" {
+  default = "*.dspace.org"
+}
+
 variable "profile" {
   default = "default"
 }
@@ -7,8 +11,12 @@ provider "aws" {
   profile = var.profile
 }
 
-data "aws_caller_identity" "current" {}
 data "aws_availability_zones" "available" {}
+data "aws_caller_identity" "current" {}
+data "aws_acm_certificate" "issued" {
+  domain   = var.certificate_domain
+  statuses = ["ISSUED"]
+}
 
 locals {
   name   = "dspace-ex-${basename(path.cwd)}"
@@ -128,6 +136,51 @@ module "dspace_sg" {
       protocol    = "tcp"
       description = "Solr access from within VPC"
       cidr_blocks = module.vpc.vpc_cidr_block
+    },
+  ]
+
+  tags = local.tags
+}
+
+module "alb" {
+  source  = "terraform-aws-modules/alb/aws"
+  version = "~> 8.0"
+
+  name               = local.name
+  load_balancer_type = "application"
+
+  vpc_id                = module.vpc.vpc_id
+  subnets               = module.vpc.public_subnets
+  security_groups       = [module.alb_sg.security_group_id]
+  create_security_group = false
+
+  # fixed responses for default actions
+  http_tcp_listeners = [
+    {
+      port        = 80
+      protocol    = "HTTP"
+      action_type = "fixed-response"
+
+      fixed_response = {
+        content_type = "text/plain"
+        message_body = "Nothing to see here!"
+        status_code  = "200"
+      }
+    },
+  ]
+
+  https_listeners = [
+    {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = data.aws_acm_certificate.issued.arn
+      action_type     = "fixed-response"
+
+      fixed_response = {
+        content_type = "text/plain"
+        message_body = "Nothing to see here!"
+        status_code  = "200"
+      }
     },
   ]
 
