@@ -154,7 +154,7 @@ module "alb" {
   security_groups       = [module.alb_sg.security_group_id]
   create_security_group = false
 
-  # fixed responses for default actions
+  # Fixed responses for default actions
   http_tcp_listeners = [
     {
       port        = 80
@@ -188,8 +188,10 @@ module "alb" {
 }
 
 module "efs" {
-  source = "terraform-aws-modules/efs/aws"
+  source  = "terraform-aws-modules/efs/aws"
+  version = "~> 1.0"
 
+  # Create two file systems
   for_each = toset(["assetstore", "solr"])
 
   # File system
