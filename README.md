@@ -1,7 +1,7 @@
 # DSpace Terraform module
 
 Terraform module to deploy [DSpace](https://dspace.lyrasis.org/) as
-[AWS ECS Fargate](https://aws.amazon.com/fargate/) services.
+[AWS ECS](https://aws.amazon.com/ecs/) services.
 
 ## Usage
 
