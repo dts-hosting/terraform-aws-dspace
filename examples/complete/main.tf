@@ -51,9 +51,9 @@ module "vpc" {
   create_database_subnet_group = true
   enable_dns_hostnames         = true
   enable_dns_support           = true
-  enable_nat_gateway           = false # disable nat, keep the costs down for this example
+  enable_nat_gateway           = true
   map_public_ip_on_launch      = false
-  single_nat_gateway           = false
+  single_nat_gateway           = true
 
   tags = local.tags
 }
