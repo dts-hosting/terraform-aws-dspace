@@ -1,11 +1,11 @@
-# DSpace Terraform module
+# DSpace Terraform modules
 
-Terraform module to deploy [DSpace](https://dspace.lyrasis.org/) as
+Terraform modules to deploy [DSpace](https://dspace.lyrasis.org/) as
 [AWS ECS](https://aws.amazon.com/ecs/) services.
 
 ## Requirements
 
-This module requires (but does not create):
+As a group the modules require (but do not create):
 
 - A VPC
 - 2+ subnets within the VPC
@@ -28,4 +28,10 @@ can be used with this module.
 ## Examples
 
 - [Complete DSpace example generating all resources (except DNS record)](examples/complete/README.md)
-- [Using pre-existing resources example as inputs to DSpace module](examples/services/README.md)
+- [Using pre-existing resources example as inputs to DSpace modules](examples/services/README.md)
+
+## Usage
+
+```bash
+TODO
+```
