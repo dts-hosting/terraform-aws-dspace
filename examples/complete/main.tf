@@ -91,6 +91,8 @@ module "backend" {
   subnets             = module.vpc.private_subnets
   timezone            = "America/New_York"
   vpc_id              = module.vpc.vpc_id
+
+  depends_on = [module.solr]
 }
 
 module "frontend" {
@@ -109,6 +111,8 @@ module "frontend" {
   security_group_id = module.dspace_sg.security_group_id
   subnets           = module.vpc.private_subnets
   vpc_id            = module.vpc.vpc_id
+
+  depends_on = [module.backend]
 }
 
 ################################################################################
