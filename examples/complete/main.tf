@@ -408,7 +408,6 @@ module "db" {
   allocated_storage     = 20
   max_allocated_storage = 100
 
-  db_name  = "dspace"
   password = aws_ssm_parameter.db_password.value
   username = aws_ssm_parameter.db_username.value
 

@@ -1,5 +1,33 @@
 [
   {
+    "name"  : "createdb",
+    "image" : "postgres:latest",
+    "networkMode": "${network_mode}",
+    "essential": false,
+    "memoryReservation": 32,
+    "command" : [
+      "/bin/sh",
+      "-c",
+      "createdb --encoding=UTF8 ${db_name} || true"
+    ],
+    "environment": [
+      {
+        "name" : "PGHOST",
+        "value" : "${db_host}"
+      }
+    ],
+    "secrets": [
+      {
+        "name" : "PGPASSWORD",
+        "valueFrom" : "${db_password_arn}"
+      },
+      {
+        "name" : "PGUSER",
+        "valueFrom" : "${db_username_arn}"
+      }
+    ]
+  },
+  {
     "name"  : "pgcrypto",
     "image" : "postgres:latest",
     "networkMode": "${network_mode}",

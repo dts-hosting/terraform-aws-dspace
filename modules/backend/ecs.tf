@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "this" {
     host            = var.host
     img             = var.img
     log_group       = var.log_group
-    memory          = var.memory - 32 # TODO: var? (this is minus the pgcrypto init task)
+    memory          = var.memory - 64 # TODO: var? (minus the createdb/pgcrypto init task)
     name            = var.name
     network_mode    = var.network_mode
     port            = var.port
