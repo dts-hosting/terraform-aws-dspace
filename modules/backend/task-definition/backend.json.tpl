@@ -57,6 +57,12 @@
         "name" : "PGUSER",
         "valueFrom" : "${db_username_arn}"
       }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "createdb",
+        "condition": "COMPLETE"
+      }
     ]
   },
   {
@@ -126,6 +132,12 @@
       {
         "sourceVolume": "${name}",
         "containerPath": "${dspace_dir}/assetstore"
+      }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "pgcrypto",
+        "condition": "COMPLETE"
       }
     ],
     "logConfiguration": {
