@@ -42,6 +42,9 @@ locals {
     "solr"       = 8983
   }
 
+  db_engine  = "postgres"
+  db_version = 14
+
   tags = {
     Name       = local.name
     Example    = local.name
@@ -358,6 +361,48 @@ module "ecs" {
   tags = local.tags
 }
 
+module "db" {
+  source  = "terraform-aws-modules/rds/aws"
+  version = "~> 5.0"
+
+  identifier = local.name
+
+  # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
+  engine               = local.db_engine
+  engine_version       = local.db_version
+  family               = "${local.db_engine}${local.db_version}" # postgres14
+  major_engine_version = local.db_version
+  instance_class       = "db.t4g.small"
+
+  allocated_storage     = 20
+  max_allocated_storage = 100
+
+  db_name  = "dspace"
+  password = aws_ssm_parameter.db_password.value
+  username = aws_ssm_parameter.db_username.value
+
+  multi_az               = false
+  db_subnet_group_name   = module.vpc.database_subnet_group
+  vpc_security_group_ids = [module.dspace_sg.security_group_id]
+
+  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
+  create_cloudwatch_log_group     = true
+
+  apply_immediately       = true
+  backup_retention_period = 1
+  skip_final_snapshot     = true
+  deletion_protection     = false
+
+  parameters = [
+    {
+      name  = "client_encoding"
+      value = "utf8"
+    }
+  ]
+
+  tags = local.tags
+}
+
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/ecs/${local.name}"
   retention_in_days = 7
@@ -368,4 +413,30 @@ resource "aws_cloudwatch_log_group" "this" {
 resource "aws_service_discovery_private_dns_namespace" "this" {
   name = "dspace.solr"
   vpc  = module.vpc.vpc_id
+}
+
+resource "aws_ssm_parameter" "db_password" {
+  name  = "${local.name}-db-password"
+  type  = "SecureString"
+  value = "testing123"
+
+  tags = local.tags
+}
+
+resource "aws_ssm_parameter" "db_url" {
+  name  = "${local.name}-db-url"
+  type  = "SecureString"
+  value = "jdbc:postgresql://${module.db.db_instance_endpoint}:5432/dspace"
+
+  depends_on = [module.db]
+
+  tags = local.tags
+}
+
+resource "aws_ssm_parameter" "db_username" {
+  name  = "${local.name}-db-username"
+  type  = "SecureString"
+  value = "dspace"
+
+  tags = local.tags
 }
