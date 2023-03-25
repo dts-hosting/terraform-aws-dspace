@@ -67,6 +67,32 @@ module "solr" {
   vpc_id               = module.vpc.vpc_id
 }
 
+module "backend" {
+  source = "../../modules/backend"
+
+  backend_url         = "https://${local.name}.dspace.org/server"
+  cluster_id          = module.ecs.cluster_id
+  db_host             = module.db.db_instance_address
+  db_name             = "dspace"
+  db_password_arn     = aws_ssm_parameter.db_password.arn
+  db_username_arn     = aws_ssm_parameter.db_username.arn
+  efs_access_point_id = module.efs["assetstore"].access_points["root"].id
+  efs_id              = module.efs["assetstore"].id
+  frontend_url        = "https://${local.name}.dspace.org"
+  host                = "${local.name}.dspace.org"
+  img                 = var.backend_img
+  listener_arn        = module.alb.https_listener_arns[0]
+  listener_priority   = 1
+  log_group           = "/aws/ecs/${local.name}"
+  name                = "${local.name}-backend"
+  namespace           = "/server"
+  security_group_id   = module.dspace_sg.security_group_id
+  solr_url            = "http://${local.name}-solr.dspace.solr:8983/solr"
+  subnets             = module.vpc.private_subnets
+  timezone            = "America/New_York"
+  vpc_id              = module.vpc.vpc_id
+}
+
 module "frontend" {
   source = "../../modules/frontend"
 
@@ -74,6 +100,7 @@ module "frontend" {
   host              = "${local.name}.dspace.org"
   img               = var.frontend_img
   listener_arn      = module.alb.https_listener_arns[0]
+  listener_priority = 2
   log_group         = "/aws/ecs/${local.name}"
   name              = "${local.name}-frontend"
   namespace         = "/"
@@ -419,16 +446,6 @@ resource "aws_ssm_parameter" "db_password" {
   name  = "${local.name}-db-password"
   type  = "SecureString"
   value = "testing123"
-
-  tags = local.tags
-}
-
-resource "aws_ssm_parameter" "db_url" {
-  name  = "${local.name}-db-url"
-  type  = "SecureString"
-  value = "jdbc:postgresql://${module.db.db_instance_endpoint}:5432/dspace"
-
-  depends_on = [module.db]
 
   tags = local.tags
 }
