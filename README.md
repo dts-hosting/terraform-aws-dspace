@@ -25,6 +25,7 @@ defined, and so on).
 The example projects show different ways that externally created resources
 can be used with this module.
 
-## Usage
+## Examples
 
-- TODO
+- [Complete DSpace example generating all resources (except DNS record)](examples/complete/README.md)
+- [Using pre-existing resources example as inputs to DSpace module](examples/services/README.md)
