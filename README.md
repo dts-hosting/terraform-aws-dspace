@@ -27,8 +27,8 @@ can be used with this module.
 
 ## Examples
 
-- [Complete DSpace example generating all resources (except DNS record)](examples/complete/README.md)
-- [Using pre-existing resources example as inputs to DSpace modules](examples/services/README.md)
+- [Complete DSpace example generating all resources (except DNS record)](examples/complete)
+- [Using pre-existing resources example as inputs to DSpace modules](examples/services)
 
 ## Usage
 
