@@ -26,7 +26,6 @@ EOF
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
     "arn:aws:iam::aws:policy/AmazonECS_FullAccess",
     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ]
 }
