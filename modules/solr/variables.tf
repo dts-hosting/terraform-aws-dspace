@@ -24,11 +24,6 @@ variable "efs_id" {
   description = "EFS id"
 }
 
-variable "efs_root_directory" {
-  description = "EFS root directory"
-  default     = "/"
-}
-
 variable "img" {
   description = "DSpace solr docker img"
 }
