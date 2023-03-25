@@ -37,6 +37,10 @@ variable "listener_arn" {
   description = "ALB (https) listener arn"
 }
 
+variable "listener_priority" {
+  description = "ALB (https) listener priority"
+}
+
 variable "log_group" {
   description = "AWS CloudWatch log group name"
 }
