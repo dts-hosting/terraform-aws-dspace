@@ -37,11 +37,31 @@ locals {
   vpc_cidr = "10.99.0.0/18"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
+  efs_access_point_perms = {
+    "assetstore" = 1001
+    "solr"       = 8983
+  }
+
   tags = {
     Name       = local.name
     Example    = local.name
     Repository = "https://github.com/dts-hosting/terraform-aws-dspace"
   }
+}
+
+module "solr" {
+  source = "../../modules/solr"
+
+  cluster_id           = module.ecs.cluster_id
+  efs_access_point_id  = module.efs["solr"].access_points["root"].id
+  efs_id               = module.efs["solr"].id
+  img                  = var.solr_img
+  log_group            = "/aws/ecs/${local.name}"
+  name                 = "${local.name}-solr"
+  security_group_id    = module.dspace_sg.security_group_id
+  service_discovery_id = aws_service_discovery_private_dns_namespace.this.id
+  subnets              = module.vpc.private_subnets
+  vpc_id               = module.vpc.vpc_id
 }
 
 module "frontend" {
@@ -290,6 +310,19 @@ module "efs" {
     }
   }
 
+  access_points = {
+    root = {
+      root_directory = {
+        path = "/${each.key}"
+        creation_info = {
+          owner_gid   = local.efs_access_point_perms[each.key]
+          owner_uid   = local.efs_access_point_perms[each.key]
+          permissions = "755"
+        }
+      }
+    }
+  }
+
   tags = local.tags
 }
 
@@ -330,4 +363,9 @@ resource "aws_cloudwatch_log_group" "this" {
   retention_in_days = 7
 
   tags = local.tags
+}
+
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name = "dspace.solr"
+  vpc  = module.vpc.vpc_id
 }
