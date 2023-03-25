@@ -217,12 +217,12 @@ module "alb" {
     {
       port        = 80
       protocol    = "HTTP"
-      action_type = "fixed-response"
+      action_type = "redirect"
 
-      fixed_response = {
-        content_type = "text/plain"
-        message_body = "Nothing to see here!"
-        status_code  = "200"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
       }
     },
   ]
