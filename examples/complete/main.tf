@@ -6,11 +6,19 @@ variable "certificate_domain" {
   default = "*.dspace.org"
 }
 
+variable "domain" {
+  default = "dspace.org"
+}
+
 variable "frontend_img" {
   default = "dspace/dspace-angular:dspace-7_x-dist"
 }
 
 variable "profile" {
+  default = "default"
+}
+
+variable "profile_for_dns" {
   default = "default"
 }
 
@@ -23,11 +31,21 @@ provider "aws" {
   profile = var.profile
 }
 
+provider "aws" {
+  region  = local.region
+  profile = var.profile_for_dns
+  alias   = "dns"
+}
+
 data "aws_availability_zones" "available" {}
 data "aws_caller_identity" "current" {}
 data "aws_acm_certificate" "issued" {
   domain   = var.certificate_domain
   statuses = ["ISSUED"]
+}
+data "aws_route53_zone" "selected" {
+  provider = aws.dns
+  name     = "${var.domain}."
 }
 
 locals {
@@ -70,7 +88,7 @@ module "solr" {
 module "backend" {
   source = "../../modules/backend"
 
-  backend_url         = "https://${local.name}.dspace.org/server"
+  backend_url         = "https://${local.name}.${var.domain}/server"
   cluster_id          = module.ecs.cluster_id
   db_host             = module.db.db_instance_address
   db_name             = "dspace"
@@ -78,8 +96,8 @@ module "backend" {
   db_username_arn     = aws_ssm_parameter.db_username.arn
   efs_access_point_id = module.efs["assetstore"].access_points["root"].id
   efs_id              = module.efs["assetstore"].id
-  frontend_url        = "https://${local.name}.dspace.org"
-  host                = "${local.name}.dspace.org"
+  frontend_url        = "https://${local.name}.${var.domain}"
+  host                = "${local.name}.${var.domain}"
   img                 = var.backend_img
   listener_arn        = module.alb.https_listener_arns[0]
   listener_priority   = 1
@@ -99,14 +117,14 @@ module "frontend" {
   source = "../../modules/frontend"
 
   cluster_id        = module.ecs.cluster_id
-  host              = "${local.name}.dspace.org"
+  host              = "${local.name}.${var.domain}"
   img               = var.frontend_img
   listener_arn      = module.alb.https_listener_arns[0]
   listener_priority = 2
   log_group         = "/aws/ecs/${local.name}"
   name              = "${local.name}-frontend"
   namespace         = "/"
-  rest_host         = "${local.name}.dspace.org"
+  rest_host         = "${local.name}.${var.domain}"
   rest_namespace    = "/server"
   security_group_id = module.dspace_sg.security_group_id
   subnets           = module.vpc.private_subnets
@@ -438,6 +456,20 @@ resource "aws_cloudwatch_log_group" "this" {
   retention_in_days = 7
 
   tags = local.tags
+}
+
+resource "aws_route53_record" "this" {
+  provider = aws.dns
+
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "${local.name}.${var.domain}"
+  type    = "A"
+
+  alias {
+    name                   = module.alb.lb_dns_name
+    zone_id                = module.alb.lb_zone_id
+    evaluate_target_health = false
+  }
 }
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
