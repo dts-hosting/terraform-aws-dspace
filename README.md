@@ -29,6 +29,7 @@ can be used with this module.
 
 - [Complete DSpace example generating all resources (except DNS record)](examples/complete)
 - [Using pre-existing resources example as inputs to DSpace modules](examples/services)
+- [Scripts for interacting with DSpace services](examples/ops)
 
 ## Usage
 
