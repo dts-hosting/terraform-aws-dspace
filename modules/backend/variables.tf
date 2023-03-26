@@ -17,7 +17,7 @@ variable "cluster_id" {
 }
 
 variable "cpu" {
-  default = 512
+  default = 1024
 }
 
 variable "db_host" {
@@ -34,10 +34,6 @@ variable "db_password_arn" {
 
 variable "db_username_arn" {
   description = "DSpace db username SSM parameter arn"
-}
-
-variable "efs_access_point_id" {
-  description = "EFS access point id"
 }
 
 variable "efs_id" {
@@ -73,7 +69,7 @@ variable "log_group" {
 }
 
 variable "memory" {
-  default = 1024
+  default = 2048
 }
 
 variable "name" {

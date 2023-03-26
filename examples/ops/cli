@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e
+CLUSTER=$1
+SECG_ID=$2
+SUBN_ID=$3
+TASK=$4
+CMD=$5
+PROFILE=${6:-default}
+
+DSPACE_EXE=/dspace/bin/dspace
+FMT_CMD=$(echo $CMD | jq -r '.|map(tostring|@sh)|join(",")' | tr "'" "\"")
+
+NETWORK_CFG=$(cat <<JSON
+{
+  "awsvpcConfiguration": {
+    "securityGroups": ["$SECG_ID"],
+    "subnets": ["$SUBN_ID"]
+  }
+}
+JSON
+)
+
+OVERRIDES_CFG=$(cat <<JSON
+{
+  "containerOverrides": [ { "name": "cli", "command": ["/dspace/bin/dspace",$FMT_CMD] } ]
+}
+JSON
+)
+
+FMT_NETWORK_CFG=$(echo $NETWORK_CFG | jq -r 'tostring')
+FMT_OVERRIDES_CFG=$(echo $OVERRIDES_CFG | jq -r 'tostring')
+
+RESULT=$(
+    aws ecs run-task \
+    --cluster $CLUSTER \
+    --task-definition $TASK \
+    --launch-type FARGATE \
+    --network-configuration=$FMT_NETWORK_CFG \
+    --overrides=$FMT_OVERRIDES_CFG \
+    --profile $PROFILE
+)
+TASK_ARN=$(echo $RESULT | jq -r '.tasks[0].taskArn')
+echo $TASK_ARN

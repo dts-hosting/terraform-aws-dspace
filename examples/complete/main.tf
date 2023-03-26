@@ -55,11 +55,6 @@ locals {
   vpc_cidr = "10.99.0.0/18"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
-  efs_access_point_perms = {
-    "assetstore" = 1001
-    "solr"       = 8983
-  }
-
   db_engine  = "postgres"
   db_version = 14
 
@@ -78,8 +73,7 @@ module "solr" {
   source = "../../modules/solr"
 
   cluster_id           = module.ecs.cluster_id
-  efs_access_point_id  = module.efs["solr"].access_points["root"].id
-  efs_id               = module.efs["solr"].id
+  efs_id               = module.efs.id
   img                  = var.solr_img
   log_group            = "/aws/ecs/${local.name}"
   name                 = "${local.name}-solr"
@@ -92,27 +86,26 @@ module "solr" {
 module "backend" {
   source = "../../modules/backend"
 
-  backend_url         = "https://${local.name}.${var.domain}/server"
-  cluster_id          = module.ecs.cluster_id
-  db_host             = module.db.db_instance_address
-  db_name             = "dspace"
-  db_password_arn     = aws_ssm_parameter.db_password.arn
-  db_username_arn     = aws_ssm_parameter.db_username.arn
-  efs_access_point_id = module.efs["assetstore"].access_points["root"].id
-  efs_id              = module.efs["assetstore"].id
-  frontend_url        = "https://${local.name}.${var.domain}"
-  host                = "${local.name}.${var.domain}"
-  img                 = var.backend_img
-  listener_arn        = module.alb.https_listener_arns[0]
-  listener_priority   = 1
-  log_group           = "/aws/ecs/${local.name}"
-  name                = "${local.name}-backend"
-  namespace           = "/server"
-  security_group_id   = module.dspace_sg.security_group_id
-  solr_url            = "http://${local.name}-solr.dspace.solr:8983/solr"
-  subnets             = module.vpc.private_subnets
-  timezone            = "America/New_York"
-  vpc_id              = module.vpc.vpc_id
+  backend_url       = "https://${local.name}.${var.domain}/server"
+  cluster_id        = module.ecs.cluster_id
+  db_host           = module.db.db_instance_address
+  db_name           = "dspace"
+  db_password_arn   = aws_ssm_parameter.db_password.arn
+  db_username_arn   = aws_ssm_parameter.db_username.arn
+  efs_id            = module.efs.id
+  frontend_url      = "https://${local.name}.${var.domain}"
+  host              = "${local.name}.${var.domain}"
+  img               = var.backend_img
+  listener_arn      = module.alb.https_listener_arns[0]
+  listener_priority = 1
+  log_group         = "/aws/ecs/${local.name}"
+  name              = "${local.name}-backend"
+  namespace         = "/server"
+  security_group_id = module.dspace_sg.security_group_id
+  solr_url          = "http://${local.name}-solr.dspace.solr:8983/solr"
+  subnets           = module.vpc.private_subnets
+  timezone          = "America/New_York"
+  vpc_id            = module.vpc.vpc_id
 
   depends_on = [module.solr]
 }
@@ -305,11 +298,8 @@ module "efs" {
   source  = "terraform-aws-modules/efs/aws"
   version = "~> 1.0"
 
-  # Create two file systems
-  for_each = toset(["assetstore", "solr"])
-
   # File system
-  name      = "${local.name}-${each.key}"
+  name      = local.name
   encrypted = true
 
   lifecycle_policy = {
@@ -363,19 +353,6 @@ module "efs" {
     vpc = {
       description = "NFS ingress from VPC"
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
-    }
-  }
-
-  access_points = {
-    root = {
-      root_directory = {
-        path = "/${each.key}"
-        creation_info = {
-          owner_gid   = local.efs_access_point_perms[each.key]
-          owner_uid   = local.efs_access_point_perms[each.key]
-          permissions = "755"
-        }
-      }
     }
   }
 
@@ -433,6 +410,7 @@ module "db" {
   password = aws_ssm_parameter.db_password.value
   username = aws_ssm_parameter.db_username.value
 
+  create_random_password = false
   multi_az               = false
   db_subnet_group_name   = module.vpc.database_subnet_group
   vpc_security_group_ids = [module.dspace_sg.security_group_id]
@@ -442,8 +420,8 @@ module "db" {
 
   apply_immediately       = true
   backup_retention_period = 1
-  skip_final_snapshot     = true
   deletion_protection     = false
+  skip_final_snapshot     = true
 
   parameters = [
     {

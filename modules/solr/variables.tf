@@ -16,10 +16,6 @@ variable "cpu" {
   default = 512
 }
 
-variable "efs_access_point_id" {
-  description = "EFS access point id"
-}
-
 variable "efs_id" {
   description = "EFS id"
 }
