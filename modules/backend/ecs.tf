@@ -1,13 +1,5 @@
-resource "aws_ecs_task_definition" "this" {
-  family                   = var.name
-  network_mode             = var.network_mode
-  requires_compatibilities = var.requires_compatibilities
-  cpu                      = var.cpu
-  memory                   = var.memory
-  execution_role_arn       = aws_iam_role.this.arn
-  task_role_arn            = aws_iam_role.this.arn
-
-  container_definitions = templatefile("${path.module}/task-definition/backend.json.tpl", {
+locals {
+  task_config = {
     backend_url     = var.backend_url
     db_host         = var.db_host
     db_name         = var.db_name
@@ -26,7 +18,21 @@ resource "aws_ecs_task_definition" "this" {
     region          = data.aws_region.current.name
     solr_url        = var.solr_url
     timezone        = var.timezone
-  })
+  }
+}
+
+resource "aws_ecs_task_definition" "this" {
+  for_each = toset(["rest", "cli"])
+
+  family                   = "${var.name}-${each.key}"
+  network_mode             = var.network_mode
+  requires_compatibilities = var.requires_compatibilities
+  cpu                      = var.cpu
+  memory                   = var.memory
+  execution_role_arn       = aws_iam_role.this.arn
+  task_role_arn            = aws_iam_role.this.arn
+
+  container_definitions = templatefile("${path.module}/task-definition/${each.key}.json.tpl", local.task_config)
 
   volume {
     name = var.name
@@ -45,7 +51,7 @@ resource "aws_ecs_task_definition" "this" {
 resource "aws_ecs_service" "this" {
   name            = var.name
   cluster         = var.cluster_id
-  task_definition = aws_ecs_task_definition.this.arn
+  task_definition = aws_ecs_task_definition.this["rest"].arn
   desired_count   = var.instances
 
   deployment_maximum_percent         = 100

@@ -68,7 +68,7 @@ module "solr" {
   img                  = var.solr_img # DSpace Solr docker image
   log_group            = "/aws/ecs/lyrasis" # AWS CloudWatch log group
   name                 = "lyrasis-solr" # Name for resources created by the module (must be unique)
-  security_group_id    = var.security_group_id # Security group id (must allow 8983)
+  security_group_id    = var.security_group_id # Security group id (must allow 8983 within VPC)
   service_discovery_id = aws_service_discovery_private_dns_namespace.this.id
   subnets              = var.subnets # Subnet ids (requires route to internet for downloading images)
   vpc_id               = var.vpc_id # VPC id
