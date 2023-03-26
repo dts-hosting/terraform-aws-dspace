@@ -36,10 +36,6 @@ variable "db_username_arn" {
   description = "DSpace db username SSM parameter arn"
 }
 
-variable "efs_access_point_id" {
-  description = "EFS access point id"
-}
-
 variable "efs_id" {
   description = "EFS id"
 }

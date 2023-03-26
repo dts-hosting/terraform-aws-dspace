@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "this" {
       transit_encryption = "ENABLED"
 
       authorization_config {
-        access_point_id = var.efs_access_point_id
+        access_point_id = aws_efs_access_point.this.id
       }
     }
   }
@@ -68,5 +68,18 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = var.assign_public_ip
     security_groups  = [var.security_group_id]
     subnets          = var.subnets
+  }
+}
+
+resource "aws_efs_access_point" "this" {
+  file_system_id = var.efs_id
+
+  root_directory {
+    path = "/${var.name}"
+    creation_info {
+      owner_gid   = 1001
+      owner_uid   = 1001
+      permissions = "755"
+    }
   }
 }

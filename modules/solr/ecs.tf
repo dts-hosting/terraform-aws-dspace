@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "this" {
       transit_encryption = "ENABLED"
 
       authorization_config {
-        access_point_id = var.efs_access_point_id
+        access_point_id = aws_efs_access_point.this.id
       }
     }
   }
@@ -75,5 +75,18 @@ resource "aws_service_discovery_service" "this" {
 
   health_check_custom_config {
     failure_threshold = 5
+  }
+}
+
+resource "aws_efs_access_point" "this" {
+  file_system_id = var.efs_id
+
+  root_directory {
+    path = "/${var.name}"
+    creation_info {
+      owner_gid   = 8983
+      owner_uid   = 8983
+      permissions = "755"
+    }
   }
 }
