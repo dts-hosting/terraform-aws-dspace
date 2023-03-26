@@ -73,7 +73,7 @@ module "solr" {
   source = "../../modules/solr"
 
   cluster_id           = module.ecs.cluster_id
-  efs_id               = module.efs["solr"].id
+  efs_id               = module.efs.id
   img                  = var.solr_img
   log_group            = "/aws/ecs/${local.name}"
   name                 = "${local.name}-solr"
@@ -92,7 +92,7 @@ module "backend" {
   db_name           = "dspace"
   db_password_arn   = aws_ssm_parameter.db_password.arn
   db_username_arn   = aws_ssm_parameter.db_username.arn
-  efs_id            = module.efs["assetstore"].id
+  efs_id            = module.efs.id
   frontend_url      = "https://${local.name}.${var.domain}"
   host              = "${local.name}.${var.domain}"
   img               = var.backend_img
@@ -410,6 +410,7 @@ module "db" {
   password = aws_ssm_parameter.db_password.value
   username = aws_ssm_parameter.db_username.value
 
+  create_random_password = false
   multi_az               = false
   db_subnet_group_name   = module.vpc.database_subnet_group
   vpc_security_group_ids = [module.dspace_sg.security_group_id]
