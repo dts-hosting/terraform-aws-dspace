@@ -17,7 +17,7 @@ variable "cluster_id" {
 }
 
 variable "cpu" {
-  default = 512
+  default = 1024
 }
 
 variable "db_host" {
@@ -69,7 +69,7 @@ variable "log_group" {
 }
 
 variable "memory" {
-  default = 1024
+  default = 2048
 }
 
 variable "name" {
