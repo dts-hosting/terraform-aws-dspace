@@ -66,8 +66,8 @@ module "solr" {
   cluster_id           = var.cluster_id # AWS ECS cluster id
   efs_id               = var.efs_id # AWS EFS id
   img                  = var.solr_img # DSpace Solr docker image
-  log_group            = "/aws/ecs/lyrasis" # AWS CloudWatch log group
-  name                 = "lyrasis-solr" # Name for resources created by the module (must be unique)
+  log_group            = "/aws/ecs/dspace" # AWS CloudWatch log group (not created / must exist already)
+  name                 = "demo-solr" # Name for resources created by the module (must be unique)
   security_group_id    = var.security_group_id # Security group id (must allow 8983 within VPC)
   service_discovery_id = aws_service_discovery_private_dns_namespace.this.id
   subnets              = var.subnets # Subnet ids (requires route to internet for downloading images)
@@ -77,15 +77,48 @@ module "solr" {
 
 Given this example, with service discovery, Solr would be available at:
 
-- `http://lyrasis-solr.dspace.solr:8983/solr`
+- `http://demo-solr.dspace.solr:8983/solr`
 
 For all configuration options review the [variables file](modules/solr/variables.tf).
 
 ### Backend
 
+Configuration for the DSpace backend (REST API server):
+
 ```hcl
-TODO
+module "backend" {
+  source = "github.com/dts-hosting/terraform-aws-dspace//modules/backend"
+
+  backend_url       = "https://example.dspace.org/server"
+  cluster_id        = var.cluster_id
+  db_host           = var.db_host # db hostname
+  db_name           = var.db_name # db name (will be created if not exists)
+  db_password_arn   = var.db_password_param # SSM param name containing password
+  db_username_arn   = var.db_username_param # SSM param name containing username
+  efs_id            = var.efs_id
+  frontend_url      = "https://example.dspace.org"
+  host              = "example.dspace.org"
+  img               = var.backend_img
+  listener_arn      = var.listener_arn
+  listener_priority = 1
+  log_group         = var.log_group_name
+  name              = "demo-backend"
+  namespace         = "/server"
+  security_group_id = data.aws_security_group.selected.id
+  solr_url          = "http://demo-solr.dspace.solr:8983/solr"
+  subnets           = var.subnets
+  timezone          = "America/New_York"
+  vpc_id            = var.vpc_id
+
+  depends_on = [module.solr]
+}
 ```
+
+Given this example, the backend would be available at:
+
+- `https://example.dspace.org:8983/server`
+
+For all configuration options review the [variables file](modules/backend/variables.tf).
 
 ### Frontend
 
