@@ -116,12 +116,38 @@ module "backend" {
 
 Given this example, the backend would be available at:
 
-- `https://example.dspace.org:8983/server`
+- `https://example.dspace.org/server`
 
 For all configuration options review the [variables file](modules/backend/variables.tf).
 
 ### Frontend
 
+Configuration for the DSpace frontend (Angular UI):
+
 ```hcl
-TODO
+module "frontend" {
+  source = "../../modules/frontend"
+
+  cluster_id        = var_efs_id
+  host              = "example.dspace.org"
+  img               = var.frontend_img
+  listener_arn      = var.listener_arn
+  listener_priority = 2
+  log_group         = var.log_group_name
+  name              = "demo-frontend"
+  namespace         = "/"
+  rest_host         = "example.dspace.org"
+  rest_namespace    = "/server"
+  security_group_id = data.aws_security_group.selected.id
+  subnets           = data.aws_subnets.selected.ids
+  vpc_id            = data.aws_vpc.selected.id
+
+  depends_on = [module.backend]
+}
 ```
+
+Given this example, the frontend would be available at:
+
+- `https://example.dspace.org`
+
+For all configuration options review the [variables file](modules/frontend/variables.tf).

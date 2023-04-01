@@ -65,6 +65,26 @@ module "backend" {
   depends_on = [module.solr]
 }
 
+module "frontend" {
+  source = "../../modules/frontend"
+
+  cluster_id        = data.aws_ecs_cluster.selected.id
+  host              = "${local.name}.${var.domain}"
+  img               = var.frontend_img
+  listener_arn      = data.aws_lb_listener.selected.arn
+  listener_priority = 2
+  log_group         = var.log_group_name
+  name              = "${local.name}-frontend"
+  namespace         = "/"
+  rest_host         = "${local.name}.${var.domain}"
+  rest_namespace    = "/server"
+  security_group_id = data.aws_security_group.selected.id
+  subnets           = data.aws_subnets.selected.ids
+  vpc_id            = data.aws_vpc.selected.id
+
+  depends_on = [module.backend]
+}
+
 ################################################################################
 # Supporting resources
 ################################################################################
