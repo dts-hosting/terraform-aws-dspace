@@ -12,7 +12,8 @@ resource "aws_iam_role" "this" {
         "Service": [
           "ec2.amazonaws.com",
           "ecs.amazonaws.com",
-          "ecs-tasks.amazonaws.com"
+          "ecs-tasks.amazonaws.com",
+          "events.amazonaws.com"
         ]
       },
       "Action": "sts:AssumeRole",
@@ -29,4 +30,19 @@ EOF
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
     "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
   ]
+
+  inline_policy {
+    name = "ECSTaskPassRole"
+
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action   = ["iam:PassRole"]
+          Effect   = "Allow"
+          Resource = "*"
+        },
+      ]
+    })
+  }
 }

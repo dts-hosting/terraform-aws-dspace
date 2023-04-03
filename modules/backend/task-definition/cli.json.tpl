@@ -2,7 +2,7 @@
   {
     "name": "cli",
     "image": "${img}",
-    "networkMode": "${network_mode}",
+    "networkMode": "awsvpc",
     "essential": true,
     "memoryReservation": ${memory},
     "environment": [

@@ -105,6 +105,11 @@ variable "subnets" {
   description = "Subnets"
 }
 
+variable "tasks" {
+  description = "Tasks to run on schedule: { name = {args, schedule} }"
+  default     = {}
+}
+
 variable "timezone" {
   description = "Timezone"
 }

@@ -59,10 +59,14 @@ module "backend" {
   security_group_id = data.aws_security_group.selected.id
   solr_url          = "http://${local.name}-solr.${var.solr_discovery_namespace}:8983/solr"
   subnets           = data.aws_subnets.selected.ids
-  timezone          = "America/New_York"
-  vpc_id            = data.aws_vpc.selected.id
-
-  depends_on = [module.solr]
+  tasks = {
+    reindex = {
+      args     = ["/dspace/bin/dspace", "index-discovery", "-b"]
+      schedule = "cron(0 8 * * ? *)"
+    }
+  }
+  timezone = "America/New_York"
+  vpc_id   = data.aws_vpc.selected.id
 }
 
 module "frontend" {
@@ -81,8 +85,6 @@ module "frontend" {
   security_group_id = data.aws_security_group.selected.id
   subnets           = data.aws_subnets.selected.ids
   vpc_id            = data.aws_vpc.selected.id
-
-  depends_on = [module.backend]
 }
 
 ################################################################################
