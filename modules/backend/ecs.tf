@@ -65,9 +65,9 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
     container_name   = "backend"
     container_port   = var.port
+    target_group_arn = aws_lb_target_group.this.arn
   }
 
   network_configuration {

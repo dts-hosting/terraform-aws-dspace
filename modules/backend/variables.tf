@@ -105,6 +105,10 @@ variable "subnets" {
   description = "Subnets"
 }
 
+variable "target_type" {
+  default = "ip"
+}
+
 variable "tasks" {
   description = "Tasks to run on schedule: { name = {args, schedule} }"
   default     = {}

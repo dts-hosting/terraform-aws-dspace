@@ -55,7 +55,9 @@ resource "aws_ecs_service" "solr" {
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.this.arn
+    container_name = "solr"
+    container_port = var.port
+    registry_arn   = aws_service_discovery_service.this.arn
   }
 }
 
@@ -67,7 +69,7 @@ resource "aws_service_discovery_service" "this" {
 
     dns_records {
       ttl  = 10
-      type = "A"
+      type = var.service_discovery_dns_type
     }
 
     routing_policy = "MULTIVALUE"

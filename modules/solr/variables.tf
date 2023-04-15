@@ -61,6 +61,10 @@ variable "service_discovery_id" {
   description = "Service discovery id"
 }
 
+variable "service_discovery_dns_type" {
+  default = "A"
+}
+
 variable "subnets" {
   description = "Subnets"
 }

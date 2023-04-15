@@ -97,6 +97,10 @@ variable "subnets" {
   description = "Subnets"
 }
 
+variable "target_type" {
+  default = "ip"
+}
+
 variable "vpc_id" {
   description = "VPC id"
 }

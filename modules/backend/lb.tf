@@ -3,7 +3,7 @@ resource "aws_lb_target_group" "this" {
   port                 = var.port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
-  target_type          = "ip"
+  target_type          = var.target_type
   deregistration_delay = 0
 
   health_check {
