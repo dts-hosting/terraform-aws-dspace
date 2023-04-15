@@ -25,8 +25,8 @@ resource "aws_ecs_task_definition" "this" {
   for_each = toset(["rest", "cli"])
 
   family                   = "${var.name}-${each.key}"
-  network_mode             = var.network_mode
-  requires_compatibilities = var.requires_compatibilities
+  network_mode             = each.key == "cli" ? "awsvpc" : var.network_mode
+  requires_compatibilities = each.key == "cli" ? ["FARGATE"] : var.requires_compatibilities
   cpu                      = var.cpu
   memory                   = var.memory
   execution_role_arn       = aws_iam_role.this.arn
