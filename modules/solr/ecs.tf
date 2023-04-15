@@ -48,10 +48,13 @@ resource "aws_ecs_service" "solr" {
     weight            = 100
   }
 
-  network_configuration {
-    assign_public_ip = var.assign_public_ip
-    security_groups  = [var.security_group_id]
-    subnets          = var.subnets
+  dynamic "network_configuration" {
+    for_each = var.network_mode == "awsvpc" ? ["true"] : []
+    content {
+      assign_public_ip = var.assign_public_ip
+      security_groups  = [var.security_group_id]
+      subnets          = var.subnets
+    }
   }
 
   service_registries {
