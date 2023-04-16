@@ -58,8 +58,8 @@ resource "aws_ecs_service" "solr" {
   }
 
   service_registries {
-    container_name = "solr"
-    container_port = var.port
+    container_name = var.network_mode == "awsvpc" ? null : "solr"
+    container_port = var.network_mode == "awsvpc" ? null : var.port
     registry_arn   = aws_service_discovery_service.this.arn
   }
 }
