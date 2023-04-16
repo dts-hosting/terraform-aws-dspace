@@ -43,14 +43,17 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
     container_name   = "frontend"
     container_port   = var.port
+    target_group_arn = aws_lb_target_group.this.arn
   }
 
-  network_configuration {
-    assign_public_ip = var.assign_public_ip
-    security_groups  = [var.security_group_id]
-    subnets          = var.subnets
+  dynamic "network_configuration" {
+    for_each = var.network_mode == "awsvpc" ? ["true"] : []
+    content {
+      assign_public_ip = var.assign_public_ip
+      security_groups  = [var.security_group_id]
+      subnets          = var.subnets
+    }
   }
 }

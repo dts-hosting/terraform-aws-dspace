@@ -48,14 +48,19 @@ resource "aws_ecs_service" "solr" {
     weight            = 100
   }
 
-  network_configuration {
-    assign_public_ip = var.assign_public_ip
-    security_groups  = [var.security_group_id]
-    subnets          = var.subnets
+  dynamic "network_configuration" {
+    for_each = var.network_mode == "awsvpc" ? ["true"] : []
+    content {
+      assign_public_ip = var.assign_public_ip
+      security_groups  = [var.security_group_id]
+      subnets          = var.subnets
+    }
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.this.arn
+    container_name = var.network_mode == "awsvpc" ? null : "solr"
+    container_port = var.network_mode == "awsvpc" ? null : var.port
+    registry_arn   = aws_service_discovery_service.this.arn
   }
 }
 
@@ -67,7 +72,7 @@ resource "aws_service_discovery_service" "this" {
 
     dns_records {
       ttl  = 10
-      type = "A"
+      type = var.service_discovery_dns_type
     }
 
     routing_policy = "MULTIVALUE"
