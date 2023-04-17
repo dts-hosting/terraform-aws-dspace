@@ -51,7 +51,7 @@
     ],
     "mountPoints": [
       {
-        "sourceVolume": "${name}",
+        "sourceVolume": "${assetstore}",
         "containerPath": "${dspace_dir}/assetstore"
       }
     ],

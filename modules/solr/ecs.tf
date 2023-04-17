@@ -1,3 +1,7 @@
+locals {
+  data_volume = "${var.name}-data"
+}
+
 resource "aws_ecs_task_definition" "this" {
   family                   = var.name
   network_mode             = var.network_mode
@@ -9,6 +13,7 @@ resource "aws_ecs_task_definition" "this" {
 
   container_definitions = templatefile("${path.module}/task-definition/solr.json.tpl", {
     container_port = var.port
+    data           = local.data_volume
     img            = var.img
     log_group      = var.log_group
     memory         = var.memory
@@ -19,14 +24,14 @@ resource "aws_ecs_task_definition" "this" {
   })
 
   volume {
-    name = var.name
+    name = local.data_volume
 
     efs_volume_configuration {
       file_system_id     = var.efs_id
       transit_encryption = "ENABLED"
 
       authorization_config {
-        access_point_id = aws_efs_access_point.this.id
+        access_point_id = aws_efs_access_point.data.id
       }
     }
   }
@@ -83,11 +88,11 @@ resource "aws_service_discovery_service" "this" {
   }
 }
 
-resource "aws_efs_access_point" "this" {
+resource "aws_efs_access_point" "data" {
   file_system_id = var.efs_id
 
   root_directory {
-    path = "/${var.name}"
+    path = "/${local.data_volume}"
     creation_info {
       owner_gid   = 8983
       owner_uid   = 8983
