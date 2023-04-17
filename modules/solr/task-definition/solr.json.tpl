@@ -35,7 +35,7 @@
     ],
     "mountPoints": [
       {
-        "sourceVolume": "${name}",
+        "sourceVolume": "${data}",
         "containerPath": "/var/solr"
       }
     ],

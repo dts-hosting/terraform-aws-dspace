@@ -1,5 +1,7 @@
 locals {
+  assetstore_volume = "${var.name}-assetstore"
   task_config = {
+    assetstore      = local.assetstore_volume
     backend_url     = var.backend_url
     db_host         = var.db_host
     db_name         = var.db_name
@@ -35,14 +37,14 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = templatefile("${path.module}/task-definition/${each.key}.json.tpl", local.task_config)
 
   volume {
-    name = var.name
+    name = local.assetstore_volume
 
     efs_volume_configuration {
       file_system_id     = var.efs_id
       transit_encryption = "ENABLED"
 
       authorization_config {
-        access_point_id = aws_efs_access_point.this.id
+        access_point_id = aws_efs_access_point.assetstore.id
       }
     }
   }
@@ -80,11 +82,11 @@ resource "aws_ecs_service" "this" {
   }
 }
 
-resource "aws_efs_access_point" "this" {
+resource "aws_efs_access_point" "assetstore" {
   file_system_id = var.efs_id
 
   root_directory {
-    path = "/${var.name}"
+    path = "/${local.assetstore_volume}"
     creation_info {
       owner_gid   = 1001
       owner_uid   = 1001
