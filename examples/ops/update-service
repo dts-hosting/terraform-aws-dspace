@@ -1,0 +1,12 @@
+#!/bin/bash
+
+CLUSTER=$1
+SERVICE=$2
+COUNT=$3
+PROFILE=${4-default}
+
+aws ecs update-service \
+  --cluster $CLUSTER \
+  --service $SERVICE \
+  --desired-count $COUNT \
+  --profile $PROFILE

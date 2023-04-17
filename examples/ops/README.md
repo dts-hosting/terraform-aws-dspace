@@ -15,6 +15,22 @@ Requires the AWS CLI [Session Manager plugin](https://docs.aws.amazon.com/system
 ./access-container dspace-ex-complete dspace-ex-complete-frontend frontend
 ```
 
+### Restart / Start / Stop containers
+
+```bash
+# restart tasks in service
+./restart-service $CLUSTER $SERVICE [$PROFILE]
+./restart-service dspace-ex-complete dspace-ex-complete-backend
+
+# stop tasks in service
+./update-service $CLUSTER $SERVICE $COUNT [$PROFILE]
+./update-service dspace-ex-complete dspace-ex-complete-backend 0
+
+# start tasks in service
+./update-service $CLUSTER $SERVICE $COUNT [$PROFILE]
+./update-service dspace-ex-complete dspace-ex-complete-backend 1
+```
+
 ### Running CLI commands
 
 Requires the AWS CLI and Fargate must be enabled on the cluster.
