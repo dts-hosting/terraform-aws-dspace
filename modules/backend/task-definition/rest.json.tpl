@@ -109,6 +109,14 @@
         "value": "${solr_url}"
       },
       {
+        "name": "JAVA_OPTS",
+        "value": "-Xmx${memory}m -Xms${memory}m"
+      },
+      {
+        "name": "LOGGING_CONFIG",
+        "value": "${log4j2_url}"
+      },
+      {
         "name": "TZ",
         "value": "${timezone}"
       }
