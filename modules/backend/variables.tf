@@ -68,6 +68,11 @@ variable "log_group" {
   description = "AWS CloudWatch log group name"
 }
 
+variable "log4j2_url" {
+  default     = "https://raw.githubusercontent.com/DSpace/DSpace/main/dspace/config/log4j2.xml"
+  description = "HTTPS url to log4j2 configuration file"
+}
+
 variable "memory" {
   default = 2048
 }

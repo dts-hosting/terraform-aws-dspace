@@ -13,6 +13,7 @@ locals {
     host            = var.host
     img             = var.img
     log_group       = var.log_group
+    log4j2_url      = var.log4j2_url
     memory          = var.memory - 64 # TODO: var? (minus the createdb/pgcrypto init task)
     name            = var.name
     network_mode    = var.network_mode
