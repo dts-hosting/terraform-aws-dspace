@@ -20,6 +20,16 @@ variable "cpu" {
   default = 1024
 }
 
+variable "custom_env_cfg" {
+  default     = {}
+  description = "General environment name/value configuration"
+}
+
+variable "custom_secrets_cfg" {
+  default     = {}
+  description = "General secrets name/value configuration"
+}
+
 variable "db_host" {
   description = "DSpace db host"
 }

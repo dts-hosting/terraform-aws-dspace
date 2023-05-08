@@ -6,6 +6,12 @@
     "essential": true,
     "memoryReservation": ${memory},
     "environment": [
+      %{ for name, value in custom_env_cfg }
+      {
+        "name": "${name}",
+        "value": "${value}"
+      },
+      %{ endfor ~}
       {
         "name": "db__P__url",
         "value": "${db_url}"
@@ -48,6 +54,12 @@
       }
     ],
     "secrets": [
+      %{ for name, value in custom_secrets_cfg }
+      {
+        "name": "${name}",
+        "valueFrom": "${value}"
+      },
+      %{ endfor ~}
       {
         "name": "db__P__password",
         "valueFrom": "${db_password_arn}"

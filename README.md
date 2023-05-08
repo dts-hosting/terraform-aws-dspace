@@ -90,6 +90,19 @@ Given this example, the backend would be available at:
 
 For all configuration options review the [variables file](modules/backend/variables.tf).
 
+#### Custom environment and secrets configuration
+
+Custom (non-predefined) environment and secrets configuration can be defined:
+
+```hcl
+custom_env_cfg = {
+  "rest__P__cors__P__allowed__D__origins" = "https://example.dspace.org,http://localhost:4000"
+}
+custom_secrets_cfg = {
+  "authentication__D__ldap__P__search__P__password" = "arn:aws:ssm:us-east-2:111222333444:parameter/ldapPassword"
+}
+```
+
 #### Tasks
 
 The `tasks` variable can be used to schedule commands that run inside dedicated,

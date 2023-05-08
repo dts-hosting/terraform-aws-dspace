@@ -1,26 +1,28 @@
 locals {
   assetstore_volume = "${var.name}-assetstore"
   task_config = {
-    assetstore      = local.assetstore_volume
-    backend_url     = var.backend_url
-    db_host         = var.db_host
-    db_name         = var.db_name
-    db_password_arn = var.db_password_arn
-    db_url          = "jdbc:postgresql://${var.db_host}:5432/${var.db_name}"
-    db_username_arn = var.db_username_arn
-    dspace_dir      = "/dspace" # TODO: var?
-    frontend_url    = var.frontend_url
-    host            = var.host
-    img             = var.img
-    log_group       = var.log_group
-    log4j2_url      = var.log4j2_url
-    memory          = var.memory - 64 # TODO: var? (minus the createdb/pgcrypto init task)
-    name            = var.name
-    network_mode    = var.network_mode
-    port            = var.port
-    region          = data.aws_region.current.name
-    solr_url        = var.solr_url
-    timezone        = var.timezone
+    assetstore         = local.assetstore_volume
+    backend_url        = var.backend_url
+    custom_env_cfg     = var.custom_env_cfg
+    custom_secrets_cfg = var.custom_secrets_cfg
+    db_host            = var.db_host
+    db_name            = var.db_name
+    db_password_arn    = var.db_password_arn
+    db_url             = "jdbc:postgresql://${var.db_host}:5432/${var.db_name}"
+    db_username_arn    = var.db_username_arn
+    dspace_dir         = "/dspace" # TODO: var?
+    frontend_url       = var.frontend_url
+    host               = var.host
+    img                = var.img
+    log_group          = var.log_group
+    log4j2_url         = var.log4j2_url
+    memory             = var.memory - 64 # TODO: var? (minus the createdb/pgcrypto init task)
+    name               = var.name
+    network_mode       = var.network_mode
+    port               = var.port
+    region             = data.aws_region.current.name
+    solr_url           = var.solr_url
+    timezone           = var.timezone
   }
 }
 
