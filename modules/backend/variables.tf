@@ -71,7 +71,7 @@ variable "listener_arn" {
 }
 
 variable "listener_priority" {
-  description = "ALB (https) listener priority"
+  description = "ALB (https) listener priority (actual value is: int * 10)"
 }
 
 variable "log_group" {
