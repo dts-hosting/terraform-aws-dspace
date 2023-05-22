@@ -23,7 +23,7 @@ resource "aws_lb_target_group" "this" {
 
 resource "aws_lb_listener_rule" "this" {
   listener_arn = var.listener_arn
-  priority     = var.listener_priority
+  priority     = var.listener_priority * 10 + 1 # force differentiate value passed to backend module
 
   action {
     type             = "forward"
