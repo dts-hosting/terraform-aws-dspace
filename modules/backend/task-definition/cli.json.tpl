@@ -4,7 +4,6 @@
     "image": "${img}",
     "networkMode": "awsvpc",
     "essential": true,
-    "memoryReservation": ${memory},
     "environment": [
       %{ for name, value in custom_env_cfg }
       {
