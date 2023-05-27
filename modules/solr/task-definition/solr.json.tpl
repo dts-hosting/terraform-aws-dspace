@@ -4,7 +4,6 @@
     "image": "${img}",
     "networkMode": "${network_mode}",
     "essential": true,
-    "memoryReservation": ${memory},
     "workingDirectory": "/var/solr",
     "entrypoint": [
       "/bin/bash",

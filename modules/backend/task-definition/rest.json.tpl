@@ -4,7 +4,6 @@
     "image" : "postgres:latest",
     "networkMode": "${network_mode}",
     "essential": false,
-    "memoryReservation": 32,
     "command" : [
       "/bin/sh",
       "-c",
@@ -32,7 +31,6 @@
     "image" : "postgres:latest",
     "networkMode": "${network_mode}",
     "essential": false,
-    "memoryReservation": 32,
     "command" : [
       "/bin/sh",
       "-c",
@@ -70,7 +68,6 @@
     "image": "${img}",
     "networkMode": "${network_mode}",
     "essential": true,
-    "memoryReservation": ${memory},
     "entrypoint": [
       "/bin/bash",
       "-c",
