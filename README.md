@@ -42,6 +42,10 @@ module "solr" {
   service_discovery_id = aws_service_discovery_private_dns_namespace.this.id
   subnets              = var.subnets # Subnet ids (requires route to internet for downloading images)
   vpc_id               = var.vpc_id # VPC id
+
+  tags = {
+    SolrUrl = "http://demo-solr.dspace.solr:8983"
+  }
 }
 ```
 
@@ -81,6 +85,10 @@ module "backend" {
   subnets           = var.subnets
   timezone          = "America/New_York"
   vpc_id            = var.vpc_id
+
+  tags = {
+    BackendUrl = "https://example.dspace.org/server/api"
+  }
 }
 ```
 
@@ -143,6 +151,10 @@ module "frontend" {
   security_group_id = data.aws_security_group.selected.id
   subnets           = data.aws_subnets.selected.ids
   vpc_id            = data.aws_vpc.selected.id
+
+  tags = {
+    FrontendUrl = "https://example.dspace.org"
+  }
 }
 ```
 

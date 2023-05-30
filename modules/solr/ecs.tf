@@ -67,6 +67,8 @@ resource "aws_ecs_service" "solr" {
     container_port = var.network_mode == "awsvpc" ? null : var.port
     registry_arn   = aws_service_discovery_service.this.arn
   }
+
+  tags = var.tags
 }
 
 resource "aws_service_discovery_service" "this" {

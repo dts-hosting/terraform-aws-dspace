@@ -69,6 +69,12 @@ variable "subnets" {
   description = "Subnets"
 }
 
+variable "tags" {
+  description = "Tags for the DSpace solr service"
+  default     = {}
+  type        = map(string)
+}
+
 variable "vpc_id" {
   description = "VPC id"
 }

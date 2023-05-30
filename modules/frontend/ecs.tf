@@ -56,4 +56,6 @@ resource "aws_ecs_service" "this" {
       subnets          = var.subnets
     }
   }
+
+  tags = var.tags
 }

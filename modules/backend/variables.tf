@@ -120,6 +120,12 @@ variable "subnets" {
   description = "Subnets"
 }
 
+variable "tags" {
+  description = "Tags for the DSpace backend service"
+  default     = {}
+  type        = map(string)
+}
+
 variable "target_type" {
   default = "ip"
 }
