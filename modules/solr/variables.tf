@@ -13,7 +13,8 @@ variable "cluster_id" {
 }
 
 variable "cpu" {
-  default = 512
+  description = "Task level cpu allocation (Fargate only)"
+  default     = 512
 }
 
 variable "efs_id" {
