@@ -32,7 +32,7 @@ resource "aws_ecs_task_definition" "this" {
   family                   = "${var.name}-${each.key}"
   network_mode             = each.key == "cli" ? "awsvpc" : var.network_mode
   requires_compatibilities = each.key == "cli" ? ["FARGATE"] : var.requires_compatibilities
-  cpu                      = var.cpu
+  cpu                      = (var.capacity_provider == "FARGATE" || each.key == "cli") ? var.cpu : null
   memory                   = var.memory
   execution_role_arn       = aws_iam_role.this.arn
   task_role_arn            = aws_iam_role.this.arn

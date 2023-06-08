@@ -17,7 +17,8 @@ variable "cluster_id" {
 }
 
 variable "cpu" {
-  default = 1024
+  description = "Task level cpu allocation (Fargate only)"
+  default     = 1024
 }
 
 variable "custom_env_cfg" {
@@ -79,8 +80,8 @@ variable "log_group" {
 }
 
 variable "log4j2_url" {
-  default     = "https://raw.githubusercontent.com/DSpace/DSpace/main/dspace/config/log4j2.xml"
   description = "HTTPS url to log4j2 configuration file"
+  default     = "https://raw.githubusercontent.com/DSpace/DSpace/main/dspace/config/log4j2.xml"
 }
 
 variable "memory" {
