@@ -30,7 +30,6 @@ module "solr" {
   cluster_id           = data.aws_ecs_cluster.selected.id
   efs_id               = data.aws_efs_file_system.selected.id
   img                  = var.solr_img
-  log_group            = var.log_group_name
   name                 = "${local.name}-solr"
   security_group_id    = data.aws_security_group.selected.id
   service_discovery_id = data.aws_service_discovery_dns_namespace.solr.id
@@ -53,7 +52,6 @@ module "backend" {
   img               = var.backend_img
   listener_arn      = data.aws_lb_listener.selected.arn
   listener_priority = 1
-  log_group         = var.log_group_name
   name              = "${local.name}-backend"
   namespace         = "/server"
   security_group_id = data.aws_security_group.selected.id
@@ -77,7 +75,6 @@ module "frontend" {
   img               = var.frontend_img
   listener_arn      = data.aws_lb_listener.selected.arn
   listener_priority = 2
-  log_group         = var.log_group_name
   name              = "${local.name}-frontend"
   namespace         = "/"
   rest_host         = "${local.name}.${var.domain}"

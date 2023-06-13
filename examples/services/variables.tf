@@ -39,7 +39,6 @@ variable "db_password_param" {}
 variable "db_username_param" {}
 variable "efs_name" {}
 variable "lb_name" {}
-variable "log_group_name" {}
 variable "security_group_name" {}
 variable "solr_discovery_namespace" {}
 variable "subnet_type" {}

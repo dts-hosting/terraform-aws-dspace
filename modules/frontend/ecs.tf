@@ -11,7 +11,7 @@ resource "aws_ecs_task_definition" "this" {
     env            = var.env
     bind           = "0.0.0.0"
     img            = var.img
-    log_group      = var.log_group
+    log_group      = aws_cloudwatch_log_group.this.name
     memory         = var.memory
     name           = var.name
     namespace      = var.namespace
@@ -58,4 +58,9 @@ resource "aws_ecs_service" "this" {
   }
 
   tags = var.tags
+}
+
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "/aws/ecs/${var.name}"
+  retention_in_days = 7
 }

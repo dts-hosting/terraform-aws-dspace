@@ -75,7 +75,6 @@ module "solr" {
   cluster_id           = module.ecs.cluster_id
   efs_id               = module.efs.id
   img                  = var.solr_img
-  log_group            = "/aws/ecs/${local.name}"
   name                 = "${local.name}-solr"
   security_group_id    = module.dspace_sg.security_group_id
   service_discovery_id = aws_service_discovery_private_dns_namespace.this.id
@@ -98,7 +97,6 @@ module "backend" {
   img               = var.backend_img
   listener_arn      = module.alb.https_listener_arns[0]
   listener_priority = 1
-  log_group         = "/aws/ecs/${local.name}"
   name              = "${local.name}-backend"
   namespace         = "/server"
   security_group_id = module.dspace_sg.security_group_id
@@ -116,7 +114,6 @@ module "frontend" {
   img               = var.frontend_img
   listener_arn      = module.alb.https_listener_arns[0]
   listener_priority = 2
-  log_group         = "/aws/ecs/${local.name}"
   name              = "${local.name}-frontend"
   namespace         = "/"
   rest_host         = "${local.name}.${var.domain}"
@@ -361,15 +358,6 @@ module "ecs" {
 
   cluster_name = local.name
 
-  cluster_configuration = {
-    execute_command_configuration = {
-      logging = "OVERRIDE"
-      log_configuration = {
-        cloud_watch_log_group_name = aws_cloudwatch_log_group.this.name
-      }
-    }
-  }
-
   # Capacity provider
   fargate_capacity_providers = {
     FARGATE = {
@@ -425,13 +413,6 @@ module "db" {
       value = "utf8"
     }
   ]
-
-  tags = local.tags
-}
-
-resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/ecs/${local.name}"
-  retention_in_days = 7
 
   tags = local.tags
 }

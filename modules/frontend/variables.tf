@@ -42,10 +42,6 @@ variable "listener_priority" {
   description = "ALB (https) listener priority (actual value is: int * 10 + 1)"
 }
 
-variable "log_group" {
-  description = "AWS CloudWatch log group name"
-}
-
 variable "memory" {
   default = 1024
 }

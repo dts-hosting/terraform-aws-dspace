@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "this" {
     container_port = var.port
     data           = local.data_volume
     img            = var.img
-    log_group      = var.log_group
+    log_group      = aws_cloudwatch_log_group.this.name
     memory         = var.memory
     network_mode   = var.network_mode
     name           = var.name
@@ -101,4 +101,9 @@ resource "aws_efs_access_point" "data" {
       permissions = "755"
     }
   }
+}
+
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "/aws/ecs/${var.name}"
+  retention_in_days = 7
 }
