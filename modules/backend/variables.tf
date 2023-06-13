@@ -75,10 +75,6 @@ variable "listener_priority" {
   description = "ALB (https) listener priority (actual value is: int * 10)"
 }
 
-variable "log_group" {
-  description = "AWS CloudWatch log group name"
-}
-
 variable "log4j2_url" {
   description = "HTTPS url to log4j2 configuration file"
   default     = "https://raw.githubusercontent.com/DSpace/DSpace/main/dspace/config/log4j2.xml"

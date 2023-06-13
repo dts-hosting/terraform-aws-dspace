@@ -23,7 +23,6 @@ efs_name                 = "dspace-efs"
 domain                   = "dspace.org"
 frontend_img             = "dspace/dspace-angular:dspace-7_x-dist"
 lb_name                  = "dspace-lb"
-log_group_name           = "/aws/ecs/dspace"
 profile                  = "default"
 profile_for_dns          = "default"
 security_group_name      = "dspace-private-app"
@@ -46,8 +45,6 @@ The key ones are:
   - the name of an existing EFS
 - `lb_name`
   - the name of an existing ALB
-- `log_group_name`
-  - the name of an existing CloudWatch log group
 - `profile_for_dns`
   - set to a different profile if necessary
   - this profile should contain the hosted zone for `domain`

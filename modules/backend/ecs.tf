@@ -14,7 +14,7 @@ locals {
     frontend_url       = var.frontend_url
     host               = var.host
     img                = var.img
-    log_group          = var.log_group
+    log_group          = aws_cloudwatch_log_group.this.name
     log4j2_url         = var.log4j2_url
     memory             = var.memory
     name               = var.name
@@ -98,4 +98,9 @@ resource "aws_efs_access_point" "assetstore" {
       permissions = "755"
     }
   }
+}
+
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "/aws/ecs/${var.name}"
+  retention_in_days = 7
 }
