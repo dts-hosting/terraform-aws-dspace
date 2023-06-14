@@ -1,12 +1,30 @@
-provider "aws" {
-  region  = local.region
-  profile = var.profile
+terraform {
+  cloud {
+    organization = "Lyrasis"
+
+    workspaces {
+      tags = ["dspace", "test"]
+    }
+  }
 }
 
 provider "aws" {
-  region  = local.region
-  profile = var.profile_for_dns
-  alias   = "dns"
+  region              = local.region
+  allowed_account_ids = [var.project_account_id]
+
+  assume_role {
+    role_arn = "arn:aws:iam::${var.project_account_id}:role/${var.role}"
+  }
+}
+
+provider "aws" {
+  alias               = "dns"
+  region              = local.region
+  allowed_account_ids = [var.dns_account_id]
+
+  assume_role {
+    role_arn = "arn:aws:iam::${var.dns_account_id}:role/${var.role}"
+  }
 }
 
 locals {
