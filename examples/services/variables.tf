@@ -10,14 +10,6 @@ variable "frontend_img" {
   default = "dspace/dspace-angular:dspace-7_x-dist"
 }
 
-variable "profile" {
-  default = "default"
-}
-
-variable "profile_for_dns" {
-  default = "default"
-}
-
 variable "solr_img" {
   default = "dspace/dspace-solr:dspace-7_x"
 }
@@ -32,6 +24,14 @@ data "aws_route53_zone" "selected" {
 ################################################################################
 # External resources
 ################################################################################
+variable "department" {}
+variable "dns_account_id" {}
+variable "environment" {}
+variable "project_account_id" {}
+variable "region" {}
+variable "role" {}
+variable "service" {}
+### module
 variable "cluster_name" {}
 variable "db_host" {}
 variable "db_name" {}

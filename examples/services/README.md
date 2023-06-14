@@ -2,6 +2,9 @@
 
 Configuration in this directory creates DSpace services.
 
+*Note: this example is used for internal testing and is not
+intended for general use other than as a reference.*
+
 ## Usage
 
 To run this example you need to create `terraform.tfvars`:
@@ -23,8 +26,6 @@ efs_name                 = "dspace-efs"
 domain                   = "dspace.org"
 frontend_img             = "dspace/dspace-angular:dspace-7_x-dist"
 lb_name                  = "dspace-lb"
-profile                  = "default"
-profile_for_dns          = "default"
 security_group_name      = "dspace-private-app"
 solr_discovery_namespace = "dspace.solr"
 solr_img                 = "dspace/dspace-solr:dspace-7_x"
@@ -45,9 +46,6 @@ The key ones are:
   - the name of an existing EFS
 - `lb_name`
   - the name of an existing ALB
-- `profile_for_dns`
-  - set to a different profile if necessary
-  - this profile should contain the hosted zone for `domain`
 - `security_group_name`
   - the name of an existing security group
 - `solr_discovery_namespace`
@@ -64,6 +62,3 @@ terraform init
 terraform plan
 terraform apply
 ```
-
-Note that this example creates resources which cost money. Run terraform destroy
-when you don't need these resources.
