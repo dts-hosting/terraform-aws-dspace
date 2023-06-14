@@ -43,7 +43,7 @@
       "options": {
         "awslogs-group": "${log_group}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "solr"
+        "awslogs-stream-prefix": "dspace"
       }
     }
   }

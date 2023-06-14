@@ -79,7 +79,7 @@
       "options": {
         "awslogs-group": "${log_group}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "cli"
+        "awslogs-stream-prefix": "dspace"
       }
     }
   }

@@ -56,7 +56,7 @@
       "options": {
         "awslogs-group": "${log_group}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "frontend"
+        "awslogs-stream-prefix": "dspace"
       }
     }
   }
