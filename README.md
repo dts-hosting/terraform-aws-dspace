@@ -17,8 +17,7 @@ Terraform modules to deploy [DSpace](https://dspace.lyrasis.org/) as
 
 The Solr module is completely optional. The DSpace backend requires a Solr
 url, and this module provides a way to run Solr as an ECS service with
-DSpace Solr configuration included. If you do use this module it requires
-[service discovery](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html).
+DSpace Solr configuration included. If you do use this module it requires [service discovery](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html).
 
 ```hcl
 resource "aws_service_discovery_private_dns_namespace" "this" {
@@ -26,6 +25,8 @@ resource "aws_service_discovery_private_dns_namespace" "this" {
   vpc  = module.vpc.vpc_id
 }
 ```
+
+*Note: currently this module only supports Fargate deployments. Also supporting EC2 may be added in the future.*
 
 Module configuration:
 
@@ -160,3 +161,26 @@ Given this example, the frontend would be available at:
 - `https://example.dspace.org`
 
 For all configuration options review the [variables file](modules/frontend/variables.tf).
+
+## Launch type configuration
+
+The `backend` (api) and `frontend` modules can deploy to either
+EC2 or Fargate.
+
+To deploy to an ECS/EC2 auto-scaling group:
+
+```ini
+capacity_provider        = "EC2"
+network_mode             = "bridge"
+requires_compatibilities = ["EC2"]
+target_type              = "instance"
+```
+
+To deploy to Fargate (the default):
+
+```ini
+capacity_provider        = "FARGATE"
+network_mode             = "awsvpc"
+requires_compatibilities = ["FARGATE"]
+target_type              = "ip"
+```
