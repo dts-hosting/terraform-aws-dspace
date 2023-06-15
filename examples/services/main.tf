@@ -3,7 +3,7 @@ terraform {
     organization = "Lyrasis"
 
     workspaces {
-      tags = ["dspace", "test"]
+      name = "dspace-module-services-test"
     }
   }
 }
