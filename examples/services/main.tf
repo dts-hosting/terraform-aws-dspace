@@ -53,6 +53,11 @@ module "solr" {
   service_discovery_id = data.aws_service_discovery_dns_namespace.solr.id
   subnets              = data.aws_subnets.selected.ids
   vpc_id               = data.aws_vpc.selected.id
+
+  # networking (tests Solr on ec2 with service discovery)
+  capacity_provider        = "EC2"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["EC2"]
 }
 
 module "backend" {
@@ -69,7 +74,8 @@ module "backend" {
   host              = "${local.name}.${var.domain}"
   img               = var.backend_img
   listener_arn      = data.aws_lb_listener.selected.arn
-  listener_priority = 1
+  listener_priority = 4999
+  log4j2_url        = "https://raw.githubusercontent.com/dts-hosting/terraform-aws-dspace/main/files/log4j2-container.xml" # TODO: rm when PR merged
   name              = "${local.name}-backend"
   namespace         = "/server"
   security_group_id = data.aws_security_group.selected.id
@@ -92,7 +98,7 @@ module "frontend" {
   host              = "${local.name}.${var.domain}"
   img               = var.frontend_img
   listener_arn      = data.aws_lb_listener.selected.arn
-  listener_priority = 2
+  listener_priority = 4999
   name              = "${local.name}-frontend"
   namespace         = "/"
   rest_host         = "${local.name}.${var.domain}"
