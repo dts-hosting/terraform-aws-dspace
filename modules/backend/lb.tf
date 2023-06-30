@@ -1,5 +1,5 @@
 resource "aws_lb_target_group" "this" {
-  name                 = var.name
+  name_prefix          = var.name
   port                 = var.port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -18,6 +18,10 @@ resource "aws_lb_target_group" "this" {
   stickiness {
     enabled = true
     type    = "lb_cookie"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 

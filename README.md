@@ -26,8 +26,6 @@ resource "aws_service_discovery_private_dns_namespace" "this" {
 }
 ```
 
-*Note: currently this module only supports Fargate deployments. Also supporting EC2 may be added in the future.*
-
 Module configuration:
 
 ```hcl
@@ -175,6 +173,20 @@ network_mode             = "bridge"
 requires_compatibilities = ["EC2"]
 target_type              = "instance"
 ```
+
+*Note: this configuration is not currently supported for the Solr module.*
+
+To deploy to an ECS/EC2 auto-scaling group with `awsvpc` network mode:
+
+```ini
+capacity_provider        = "EC2"
+network_mode             = "awsvpc"
+requires_compatibilities = ["EC2"]
+target_type              = "ip" # omit for Solr module
+```
+
+*Note: this configuration is supported for the Solr module but has
+[specific requirements](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container-instance-eni.html).*
 
 To deploy to Fargate (the default):
 
