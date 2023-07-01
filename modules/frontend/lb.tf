@@ -1,5 +1,5 @@
 resource "aws_lb_target_group" "this" {
-  name_prefix          = "ui"
+  name_prefix          = "ui-"
   port                 = var.port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
