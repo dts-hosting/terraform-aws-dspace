@@ -46,6 +46,7 @@ module "solr" {
   source = "../../modules/solr"
 
   cluster_id           = data.aws_ecs_cluster.selected.id
+  cpu                  = null
   efs_id               = data.aws_efs_file_system.selected.id
   img                  = var.solr_img
   name                 = "${local.name}-solr"
