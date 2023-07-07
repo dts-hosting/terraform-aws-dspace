@@ -113,7 +113,7 @@
       },
       {
         "name": "JAVA_OPTS",
-        "value": "-Xmx${memory}m -Xms${memory}m"
+        "value": "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xss512k -Xmx${memory}m -Xms${memory}m"
       },
       {
         "name": "LOGGING_CONFIG",
