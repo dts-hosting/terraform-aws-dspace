@@ -12,12 +12,22 @@ variable "capacity_provider" {
   default = "FARGATE"
 }
 
+variable "cli_cpu" {
+  description = "Task level cpu allocation for cli"
+  default     = 1024
+}
+
+variable "cli_memory" {
+  description = "Task level memory allocation for cli"
+  default     = 2048
+}
+
 variable "cluster_id" {
   description = "ECS cluster id"
 }
 
 variable "cpu" {
-  description = "Task level cpu allocation (Fargate only)"
+  description = "Task level cpu allocation"
   default     = 1024
 }
 
