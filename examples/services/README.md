@@ -16,6 +16,10 @@ terraform apply
 Without a `terraform.tfvars` file the deployment will use the
 default configuration (c.f. hosting repository).
 
+This will create:
+
+- https://dspace-ex-services.dspace.org
+
 ### Override configuration
 
 Optionally create `terraform.tfvars`:
