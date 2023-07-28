@@ -160,6 +160,20 @@ Given this example, the frontend would be available at:
 
 For all configuration options review the [variables file](modules/frontend/variables.tf).
 
+#### Custom environment and secrets configuration
+
+Custom (non-predefined) environment and secrets configuration can be defined:
+
+```hcl
+custom_env_cfg = {
+  "DSPACE_CACHE_SERVERSIDE_ANONYMOUSCACHE_MAX" = "500",
+  "NEW_RELIC_APP_NAME" = "dspace-frontend"
+}
+custom_secrets_cfg = {
+  "NEW_RELIC_LICENSE_KEY" = "arn:aws:ssm:us-east-2:111222333444:parameter/newrelic_license_key"
+}
+```
+
 ## Launch type configuration
 
 The `backend` (api) and `frontend` modules can deploy to either

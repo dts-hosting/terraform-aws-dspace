@@ -107,6 +107,10 @@ module "frontend" {
   security_group_id = data.aws_security_group.selected.id
   subnets           = data.aws_subnets.selected.ids
   vpc_id            = data.aws_vpc.selected.id
+
+  custom_env_cfg = {
+    "DSPACE_CACHE_SERVERSIDE_ANONYMOUSCACHE_MAX" = "500"
+  }
 }
 
 ################################################################################
