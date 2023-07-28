@@ -8,21 +8,23 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn            = aws_iam_role.this.arn
 
   container_definitions = templatefile("${path.module}/task-definition/frontend.json.tpl", {
-    env            = var.env
-    bind           = "0.0.0.0"
-    img            = var.img
-    log_group      = aws_cloudwatch_log_group.this.name
-    memory         = var.memory
-    name           = var.name
-    namespace      = var.namespace
-    network_mode   = var.network_mode
-    port           = var.port
-    region         = data.aws_region.current.name
-    rest_host      = var.rest_host
-    rest_namespace = var.rest_namespace
-    rest_port      = var.rest_port
-    rest_ssl       = var.rest_ssl
-    ssl            = "false" # ssl termination handled by alb
+    custom_env_cfg     = var.custom_env_cfg
+    custom_secrets_cfg = var.custom_secrets_cfg
+    env                = var.env
+    bind               = "0.0.0.0"
+    img                = var.img
+    log_group          = aws_cloudwatch_log_group.this.name
+    memory             = var.memory
+    name               = var.name
+    namespace          = var.namespace
+    network_mode       = var.network_mode
+    port               = var.port
+    region             = data.aws_region.current.name
+    rest_host          = var.rest_host
+    rest_namespace     = var.rest_namespace
+    rest_port          = var.rest_port
+    rest_ssl           = var.rest_ssl
+    ssl                = "false" # ssl termination handled by alb
   })
 }
 

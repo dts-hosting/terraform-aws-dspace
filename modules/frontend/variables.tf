@@ -17,6 +17,16 @@ variable "cpu" {
   default     = 512
 }
 
+variable "custom_env_cfg" {
+  default     = {}
+  description = "General environment name/value configuration"
+}
+
+variable "custom_secrets_cfg" {
+  default     = {}
+  description = "General secrets name/value configuration"
+}
+
 variable "env" {
   description = "DSpace frontend env (node)"
   default     = "production"

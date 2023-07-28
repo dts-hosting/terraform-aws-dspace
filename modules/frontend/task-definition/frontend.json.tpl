@@ -5,6 +5,12 @@
     "networkMode": "${network_mode}",
     "essential": true,
     "environment": [
+      %{ for name, value in custom_env_cfg }
+      {
+        "name": "${name}",
+        "value": "${value}"
+      },
+      %{ endfor ~}
       {
         "name": "DSPACE_UI_SSL",
         "value": "${ssl}"
@@ -45,6 +51,14 @@
         "name": "NODE_OPTIONS",
         "value": "--max-old-space-size=${memory}"
       }
+    ],
+    "secrets": [
+      %{ for name, value in custom_secrets_cfg }
+      {
+        "name": "${name}",
+        "valueFrom": "${value}"
+      },
+      %{ endfor ~}
     ],
     "portMappings": [
       {
