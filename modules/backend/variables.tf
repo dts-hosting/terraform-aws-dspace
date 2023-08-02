@@ -32,13 +32,13 @@ variable "cpu" {
 }
 
 variable "custom_env_cfg" {
-  default     = {}
   description = "General environment name/value configuration"
+  default     = {}
 }
 
 variable "custom_secrets_cfg" {
-  default     = {}
   description = "General secrets name/value configuration"
+  default     = {}
 }
 
 variable "db_host" {
@@ -55,6 +55,11 @@ variable "db_password_arn" {
 
 variable "db_username_arn" {
   description = "DSpace db username SSM parameter arn"
+}
+
+variable "dspace_name" {
+  description = "Short and sweet site name"
+  default     = "DSpace at My University"
 }
 
 variable "efs_id" {

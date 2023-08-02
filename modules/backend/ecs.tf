@@ -10,6 +10,7 @@ locals {
     db_password_arn    = var.db_password_arn
     db_url             = "jdbc:postgresql://${var.db_host}:5432/${var.db_name}"
     db_username_arn    = var.db_username_arn
+    dspace_name        = var.dspace_name
     dspace_dir         = "/dspace" # TODO: var?
     frontend_url       = var.frontend_url
     host               = var.host

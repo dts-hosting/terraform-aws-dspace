@@ -25,7 +25,7 @@
       },
       {
         "name": "dspace__P__name",
-        "value": "${name}"
+        "value": "${dspace_name}"
       },
       {
         "name": "dspace__P__server__P__url",
