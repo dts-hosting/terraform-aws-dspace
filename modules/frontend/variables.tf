@@ -73,6 +73,11 @@ variable "port" {
   default     = 4000
 }
 
+variable "redirects" {
+  description = "Redirect frontend paths to rest server"
+  default     = ["oai", "sword"]
+}
+
 variable "requires_compatibilities" {
   default = ["FARGATE"]
 }
