@@ -111,6 +111,8 @@ module "frontend" {
   custom_env_cfg = {
     "DSPACE_CACHE_SERVERSIDE_ANONYMOUSCACHE_MAX" = "500"
   }
+
+  robots_txt = file("${path.module}/robots.txt")
 }
 
 ################################################################################
