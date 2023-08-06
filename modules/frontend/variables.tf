@@ -101,6 +101,12 @@ variable "rest_ssl" {
   default     = true
 }
 
+variable "robots_txt" {
+  description = "DSpace frontend custom robots.txt"
+  default     = null
+  type        = string
+}
+
 variable "security_group_id" {
   description = "Security group id"
 }
