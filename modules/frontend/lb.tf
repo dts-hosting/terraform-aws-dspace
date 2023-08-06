@@ -25,9 +25,43 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+resource "aws_lb_listener_rule" "redirect" {
+  for_each = toset(var.redirects)
+
+  listener_arn = var.listener_arn
+  # force differentiate value passed to backend module
+  priority = var.listener_priority * 10 + (index(var.redirects, each.value) + 1)
+
+  action {
+    type = "redirect"
+
+    redirect {
+      protocol    = "HTTPS"
+      port        = "443"
+      status_code = "HTTP_301"
+      host        = var.rest_host
+      path        = "${var.rest_namespace}/#{path}"
+      query       = "#{query}"
+    }
+  }
+
+  condition {
+    host_header {
+      values = [var.host]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["${var.namespace}${each.value}*"]
+    }
+  }
+}
+
 resource "aws_lb_listener_rule" "this" {
   listener_arn = var.listener_arn
-  priority     = var.listener_priority * 10 + 1 # force differentiate value passed to backend module
+  # force differentiate value passed to backend module
+  priority = var.listener_priority * 10 + (length(var.redirects) + 1)
 
   action {
     type             = "forward"
