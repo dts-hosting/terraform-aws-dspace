@@ -58,6 +58,11 @@ data "aws_lb" "selected" {
   name = var.lb_name
 }
 
+data "aws_lb_listener" "http" {
+  load_balancer_arn = data.aws_lb.selected.arn
+  port              = 80
+}
+
 data "aws_lb_listener" "selected" {
   load_balancer_arn = data.aws_lb.selected.arn
   port              = 443

@@ -115,6 +115,22 @@ module "frontend" {
   robots_txt = file("${path.module}/robots.txt")
 }
 
+module "certbot" {
+  source = "../../modules/certbot"
+
+  capacity_provider = "FARGATE_SPOT"
+  cluster_id        = data.aws_ecs_cluster.selected.id
+  email             = "no-reply@${var.domain}"
+  enabled           = true
+  hostname          = "${local.name}.${var.domain}"
+  lb_name           = var.lb_name
+  listener_arn      = data.aws_lb_listener.http.arn
+  name              = "${local.name}-certbot"
+  security_group_id = data.aws_security_group.selected.id
+  subnets           = data.aws_subnets.selected.ids
+  vpc_id            = data.aws_vpc.selected.id
+}
+
 ################################################################################
 # Supporting resources
 ################################################################################
