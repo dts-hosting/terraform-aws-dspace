@@ -135,7 +135,7 @@ Configuration for the DSpace frontend (Angular UI):
 module "frontend" {
   source = "../../modules/frontend"
 
-  cluster_id        = var_efs_id
+  cluster_id        = var.cluster_id
   host              = "example.dspace.org"
   img               = var.frontend_img
   listener_arn      = var.listener_arn
@@ -159,6 +159,35 @@ Given this example, the frontend would be available at:
 - `https://example.dspace.org`
 
 For all configuration options review the [variables file](modules/frontend/variables.tf).
+
+### Certbot
+
+Optional module for `http` -> `https` redirection when a certbot certificate is required. If you
+cannot use ACM directly and / or would otherwise prefer to generate an SSL certificate using
+certbot this module runs an nginx proxy as a service that will support certbot webroot
+challenges. To do this the `listener_arn` must be for an `http` listener: http requests will be
+allowed through to the certbot container and redirected to https unless responding to certbot
+challenges. If certificate generation is successful the certificate is uploaded to ACM and
+registered with the specified load balancer (identified by name).
+
+```hcl
+module "certbot" {
+  source = "../../modules/certbot"
+
+  cluster_id        = var.cluster_id
+  email             = "example@dspace.org"
+  enabled           = true
+  hostname          = "example.dspace.org"
+  lb_name           = var.lb_name
+  listener_arn      = var.listener_arn
+  name              = "demo-certbot"
+  security_group_id = data.aws_security_group.selected.id
+  subnets           = data.aws_subnets.selected.ids
+  vpc_id            = data.aws_vpc.selected.id
+}
+```
+
+For more details on the certbot container refer to [docker-certbot-acm](https://github.com/dts-hosting/docker-certbot-acm).
 
 #### Custom environment and secrets configuration
 
