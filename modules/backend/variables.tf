@@ -18,8 +18,8 @@ variable "cli_cpu" {
 }
 
 variable "cli_memory" {
-  description = "Task level memory allocation for cli"
-  default     = 2048
+  description = "Task level memory allocation for cli (hard limit)"
+  default     = 3072
 }
 
 variable "cluster_id" {
@@ -62,6 +62,11 @@ variable "dspace_name" {
   default     = "DSpace at My University"
 }
 
+variable "dspace_xmx" {
+  description = "Container level memory allocation for DSpace (rest and cli)"
+  default     = 2048
+}
+
 variable "efs_id" {
   description = "EFS id"
 }
@@ -96,7 +101,8 @@ variable "log4j2_url" {
 }
 
 variable "memory" {
-  default = 2048
+  description = "Task level memory allocation (hard limit)"
+  default     = 3072
 }
 
 variable "name" {

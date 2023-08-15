@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "this" {
     bind               = "0.0.0.0"
     img                = var.img
     log_group          = aws_cloudwatch_log_group.this.name
-    memory             = var.memory
+    memory             = var.max_old_space_size
     name               = var.name
     namespace          = var.namespace
     network_mode       = var.network_mode

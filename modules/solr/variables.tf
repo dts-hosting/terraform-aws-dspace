@@ -30,7 +30,8 @@ variable "instances" {
 }
 
 variable "memory" {
-  default = 1024
+  dedescription = "Task level memory allocation (hard limit)"
+  default       = 1024
 }
 
 variable "name" {
@@ -60,6 +61,11 @@ variable "service_discovery_id" {
 
 variable "service_discovery_dns_type" {
   default = "A"
+}
+
+variable "solr_java_mem" {
+  description = "Container level memory allocation (solr)"
+  default     = 768
 }
 
 variable "subnets" {
