@@ -30,8 +30,8 @@ variable "instances" {
 }
 
 variable "memory" {
-  dedescription = "Task level memory allocation (hard limit)"
-  default       = 1024
+  description = "Task level memory allocation (hard limit)"
+  default     = 1024
 }
 
 variable "name" {
