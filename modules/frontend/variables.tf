@@ -52,8 +52,14 @@ variable "listener_priority" {
   description = "ALB (https) listener priority (actual value is: int * 10 + 1)"
 }
 
+variable "max_old_space_size" {
+  description = "Container level memory allocation (frontend / node)"
+  default     = 768
+}
+
 variable "memory" {
-  default = 1024
+  description = "Task level memory allocation (hard limit)"
+  default     = 1024
 }
 
 variable "name" {

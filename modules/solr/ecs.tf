@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "this" {
     data           = local.data_volume
     img            = var.img
     log_group      = aws_cloudwatch_log_group.this.name
-    memory         = var.memory
+    memory         = var.solr_java_mem
     network_mode   = var.network_mode
     name           = var.name
     port           = var.port
