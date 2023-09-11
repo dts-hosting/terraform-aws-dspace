@@ -160,6 +160,23 @@ Given this example, the frontend would be available at:
 
 For all configuration options review the [variables file](modules/frontend/variables.tf).
 
+#### Autoscaling
+
+For the frontend there is an autoscaling policy which can be configured by:
+
+```hcl
+autoscaling_cpu_threshold = 75
+autoscaling_max_capacity  = 3 # max no. of instances
+```
+
+The minimum capacity is set to 1.
+
+The policy overrides `[var.]instances` so to fully stop the frontend service you need to
+target the autoscaling group policy not the ECS service (when using the AWS cli for example).
+
+This feature requires sticky sessions which is enabled on the target group created by
+this module.
+
 ### Certbot
 
 Optional module for `http` -> `https` redirection when a certbot certificate is required. If you

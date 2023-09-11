@@ -4,6 +4,16 @@ variable "assign_public_ip" {
   default = false
 }
 
+variable "autoscaling_cpu_threshold" {
+  description = "The % cpu utilization that when exceeded triggers a scale out event"
+  default     = 75
+}
+
+variable "autoscaling_max_capacity" {
+  description = "The maximum number of instances that can be run"
+  default     = 1
+}
+
 variable "capacity_provider" {
   default = "FARGATE"
 }
@@ -41,7 +51,8 @@ variable "img" {
 }
 
 variable "instances" {
-  default = 1
+  description = "The default number of instances to launch"
+  default     = 1
 }
 
 variable "listener_arn" {
