@@ -12,8 +12,10 @@ resource "aws_iam_role" "this" {
         "Service": [
           "application-autoscaling.amazonaws.com",
           "ec2.amazonaws.com",
+          "ecs.application-autoscaling.amazonaws.com",
           "ecs.amazonaws.com",
-          "ecs-tasks.amazonaws.com"
+          "ecs-tasks.amazonaws.com",
+          "events.amazonaws.com"
         ]
       },
       "Action": "sts:AssumeRole",
@@ -28,6 +30,8 @@ EOF
     "arn:aws:iam::aws:policy/AmazonECS_FullAccess",
     "arn:aws:iam::aws:policy/AmazonSNSFullAccess",
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess",
+    "arn:aws:iam::aws:policy/CloudWatchFullAccess",
     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
   ]
 }
