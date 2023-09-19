@@ -1,33 +1,19 @@
-locals {
-  data_volume = "${var.name}-data"
-}
-
 resource "aws_ecs_task_definition" "this" {
-  family                   = var.name
-  network_mode             = var.network_mode
-  requires_compatibilities = var.requires_compatibilities
-  cpu                      = var.cpu
-  memory                   = var.memory
+  family                   = local.name
+  network_mode             = local.network_mode
+  requires_compatibilities = local.requires_compatibilities
+  cpu                      = local.cpu
+  memory                   = local.memory
   execution_role_arn       = aws_iam_role.this.arn
   task_role_arn            = aws_iam_role.this.arn
 
-  container_definitions = templatefile("${path.module}/task-definition/solr.json.tpl", {
-    container_port = var.port
-    data           = local.data_volume
-    img            = var.img
-    log_group      = aws_cloudwatch_log_group.this.name
-    memory         = var.solr_java_mem
-    network_mode   = var.network_mode
-    name           = var.name
-    port           = var.port
-    region         = data.aws_region.current.name
-  })
+  container_definitions = templatefile("${path.module}/task-definition/solr.json.tpl", local.task_config)
 
   volume {
     name = local.data_volume
 
     efs_volume_configuration {
-      file_system_id     = var.efs_id
+      file_system_id     = local.efs_id
       transit_encryption = "ENABLED"
 
       authorization_config {
@@ -38,10 +24,10 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_ecs_service" "solr" {
-  name            = var.name
-  cluster         = var.cluster_id
+  name            = local.name
+  cluster         = local.cluster_id
   task_definition = aws_ecs_task_definition.this.arn
-  desired_count   = var.instances
+  desired_count   = local.instances
 
   deployment_maximum_percent         = 100
   deployment_minimum_healthy_percent = 0
@@ -49,37 +35,37 @@ resource "aws_ecs_service" "solr" {
   enable_execute_command = true
 
   capacity_provider_strategy {
-    capacity_provider = var.capacity_provider
+    capacity_provider = local.capacity_provider
     weight            = 100
   }
 
   dynamic "network_configuration" {
-    for_each = var.network_mode == "awsvpc" ? ["true"] : []
+    for_each = local.network_mode == "awsvpc" ? ["true"] : []
     content {
-      assign_public_ip = var.assign_public_ip
-      security_groups  = [var.security_group_id]
-      subnets          = var.subnets
+      assign_public_ip = local.assign_public_ip
+      security_groups  = [local.security_group_id]
+      subnets          = local.subnets
     }
   }
 
   service_registries {
-    container_name = var.network_mode == "awsvpc" ? null : "solr"
-    container_port = var.network_mode == "awsvpc" ? null : var.port
+    container_name = local.network_mode == "awsvpc" ? null : "solr"
+    container_port = local.network_mode == "awsvpc" ? null : local.port
     registry_arn   = aws_service_discovery_service.this.arn
   }
 
-  tags = var.tags
+  tags = local.tags
 }
 
 resource "aws_service_discovery_service" "this" {
-  name = var.name
+  name = local.name
 
   dns_config {
-    namespace_id = var.service_discovery_id
+    namespace_id = local.service_discovery_id
 
     dns_records {
       ttl  = 10
-      type = var.service_discovery_dns_type
+      type = local.service_discovery_dns_type
     }
 
     routing_policy = "MULTIVALUE"
@@ -91,7 +77,7 @@ resource "aws_service_discovery_service" "this" {
 }
 
 resource "aws_efs_access_point" "data" {
-  file_system_id = var.efs_id
+  file_system_id = local.efs_id
 
   root_directory {
     path = "/${local.data_volume}"
@@ -104,6 +90,6 @@ resource "aws_efs_access_point" "data" {
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/ecs/${var.name}"
+  name              = "/aws/ecs/${local.name}"
   retention_in_days = 7
 }

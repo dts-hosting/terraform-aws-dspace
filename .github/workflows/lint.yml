@@ -13,7 +13,7 @@ jobs:
     # https://github.com/marketplace/actions/hashicorp-setup-terraform
     - uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.4.2
+        terraform_version: 1.5.7
 
     - name: Terraform fmt
       run: terraform fmt -check -recursive

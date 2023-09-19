@@ -1,15 +1,15 @@
 resource "aws_cloudwatch_event_rule" "this" {
-  for_each = var.tasks
+  for_each = local.tasks
 
-  name                = "${var.name}-${each.key}"
+  name                = "${local.name}-${each.key}"
   schedule_expression = each.value.schedule
 }
 
 resource "aws_cloudwatch_event_target" "this" {
-  for_each = var.tasks
+  for_each = local.tasks
 
-  target_id = "${var.name}-${each.key}"
-  arn       = var.cluster_id
+  target_id = "${local.name}-${each.key}"
+  arn       = local.cluster_id
   rule      = aws_cloudwatch_event_rule.this[each.key].name
   role_arn  = aws_iam_role.this.arn
 
@@ -20,9 +20,9 @@ resource "aws_cloudwatch_event_target" "this" {
     task_definition_arn = aws_ecs_task_definition.this["cli"].arn
 
     network_configuration {
-      assign_public_ip = var.assign_public_ip
-      security_groups  = [var.security_group_id]
-      subnets          = var.subnets
+      assign_public_ip = local.assign_public_ip
+      security_groups  = [local.security_group_id]
+      subnets          = local.subnets
     }
   }
 

@@ -1,40 +1,11 @@
-locals {
-  assetstore_volume = "${var.name}-assetstore"
-  task_config = {
-    assetstore         = local.assetstore_volume
-    backend_url        = var.backend_url
-    custom_env_cfg     = var.custom_env_cfg
-    custom_secrets_cfg = var.custom_secrets_cfg
-    db_host            = var.db_host
-    db_name            = var.db_name
-    db_password_arn    = var.db_password_arn
-    db_url             = "jdbc:postgresql://${var.db_host}:5432/${var.db_name}"
-    db_username_arn    = var.db_username_arn
-    dspace_name        = var.dspace_name
-    dspace_dir         = "/dspace" # TODO: var?
-    frontend_url       = var.frontend_url
-    host               = var.host
-    img                = var.img
-    log_group          = aws_cloudwatch_log_group.this.name
-    log4j2_url         = var.log4j2_url
-    memory             = var.dspace_xmx
-    name               = var.name
-    network_mode       = var.network_mode
-    port               = var.port
-    region             = data.aws_region.current.name
-    solr_url           = var.solr_url
-    timezone           = var.timezone
-  }
-}
-
 resource "aws_ecs_task_definition" "this" {
   for_each = toset(["rest", "cli"])
 
-  family                   = "${var.name}-${each.key}"
-  network_mode             = each.key == "cli" ? "awsvpc" : var.network_mode
-  requires_compatibilities = each.key == "cli" ? ["FARGATE"] : var.requires_compatibilities
-  cpu                      = each.key == "cli" ? var.cli_cpu : var.cpu
-  memory                   = each.key == "cli" ? var.cli_memory : var.memory
+  family                   = "${local.name}-${each.key}"
+  network_mode             = each.key == "cli" ? "awsvpc" : local.network_mode
+  requires_compatibilities = each.key == "cli" ? ["FARGATE"] : local.requires_compatibilities
+  cpu                      = each.key == "cli" ? local.cli_cpu : local.cpu
+  memory                   = each.key == "cli" ? local.cli_memory : local.memory
   execution_role_arn       = aws_iam_role.this.arn
   task_role_arn            = aws_iam_role.this.arn
 
@@ -44,7 +15,7 @@ resource "aws_ecs_task_definition" "this" {
     name = local.assetstore_volume
 
     efs_volume_configuration {
-      file_system_id     = var.efs_id
+      file_system_id     = local.efs_id
       transit_encryption = "ENABLED"
 
       authorization_config {
@@ -55,10 +26,10 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_ecs_service" "this" {
-  name            = var.name
-  cluster         = var.cluster_id
+  name            = local.name
+  cluster         = local.cluster_id
   task_definition = aws_ecs_task_definition.this["rest"].arn
-  desired_count   = var.instances
+  desired_count   = local.instances
 
   deployment_maximum_percent         = 100
   deployment_minimum_healthy_percent = 0
@@ -66,30 +37,30 @@ resource "aws_ecs_service" "this" {
   enable_execute_command = true
 
   capacity_provider_strategy {
-    capacity_provider = var.capacity_provider
+    capacity_provider = local.capacity_provider
     weight            = 100
   }
 
   load_balancer {
     container_name   = "backend"
-    container_port   = var.port
+    container_port   = local.port
     target_group_arn = aws_lb_target_group.this.arn
   }
 
   dynamic "network_configuration" {
-    for_each = var.network_mode == "awsvpc" ? ["true"] : []
+    for_each = local.network_mode == "awsvpc" ? ["true"] : []
     content {
-      assign_public_ip = var.assign_public_ip
-      security_groups  = [var.security_group_id]
-      subnets          = var.subnets
+      assign_public_ip = local.assign_public_ip
+      security_groups  = [local.security_group_id]
+      subnets          = local.subnets
     }
   }
 
-  tags = var.tags
+  tags = local.tags
 }
 
 resource "aws_efs_access_point" "assetstore" {
-  file_system_id = var.efs_id
+  file_system_id = local.efs_id
 
   root_directory {
     path = "/${local.assetstore_volume}"
@@ -102,6 +73,6 @@ resource "aws_efs_access_point" "assetstore" {
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/ecs/${var.name}"
+  name              = "/aws/ecs/${local.name}"
   retention_in_days = 7
 }

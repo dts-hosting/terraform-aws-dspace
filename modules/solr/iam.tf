@@ -1,5 +1,5 @@
 resource "aws_iam_role" "this" {
-  name = var.name
+  name = local.name
   path = "/"
 
   assume_role_policy = <<EOF
