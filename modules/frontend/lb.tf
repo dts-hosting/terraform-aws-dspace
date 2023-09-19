@@ -1,13 +1,13 @@
 resource "aws_lb_target_group" "this" {
   name_prefix          = "ui-"
-  port                 = var.port
+  port                 = local.port
   protocol             = "HTTP"
-  vpc_id               = var.vpc_id
-  target_type          = var.target_type
+  vpc_id               = local.vpc_id
+  target_type          = local.target_type
   deregistration_delay = 0
 
   health_check {
-    path                = var.namespace
+    path                = local.namespace
     interval            = 60
     timeout             = 30
     healthy_threshold   = 2
@@ -26,11 +26,11 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_lb_listener_rule" "redirect" {
-  for_each = toset(var.redirects)
+  for_each = toset(local.redirects)
 
-  listener_arn = var.listener_arn
+  listener_arn = local.listener_arn
   # force differentiate value passed to backend module
-  priority = var.listener_priority * 10 + (index(var.redirects, each.value) + 1)
+  priority = local.listener_priority * 10 + (index(local.redirects, each.value) + 1)
 
   action {
     type = "redirect"
@@ -39,21 +39,21 @@ resource "aws_lb_listener_rule" "redirect" {
       protocol    = "HTTPS"
       port        = "443"
       status_code = "HTTP_301"
-      host        = var.rest_host
-      path        = "${var.rest_namespace}/#{path}"
+      host        = local.rest_host
+      path        = "${local.rest_namespace}/#{path}"
       query       = "#{query}"
     }
   }
 
   condition {
     host_header {
-      values = [var.host]
+      values = [local.host]
     }
   }
 
   condition {
     path_pattern {
-      values = ["${var.namespace}${each.value}*"]
+      values = ["${local.namespace}${each.value}*"]
     }
   }
 
@@ -61,31 +61,31 @@ resource "aws_lb_listener_rule" "redirect" {
 }
 
 resource "aws_lb_listener_rule" "robots" {
-  count = try(var.robots_txt, null) != null ? 1 : 0
+  count = try(local.robots_txt, null) != null ? 1 : 0
 
-  listener_arn = var.listener_arn
+  listener_arn = local.listener_arn
   # force differentiate value passed to backend module
-  priority = var.listener_priority * 10 + (length(var.redirects) + 1)
+  priority = local.listener_priority * 10 + (length(local.redirects) + 1)
 
   action {
     type = "fixed-response"
 
     fixed_response {
       content_type = "text/plain"
-      message_body = var.robots_txt
+      message_body = local.robots_txt
       status_code  = "200"
     }
   }
 
   condition {
     host_header {
-      values = [var.host]
+      values = [local.host]
     }
   }
 
   condition {
     path_pattern {
-      values = ["${var.namespace}robots.txt"]
+      values = ["${local.namespace}robots.txt"]
     }
   }
 
@@ -93,9 +93,9 @@ resource "aws_lb_listener_rule" "robots" {
 }
 
 resource "aws_lb_listener_rule" "this" {
-  listener_arn = var.listener_arn
+  listener_arn = local.listener_arn
   # force differentiate value passed to backend module
-  priority = var.listener_priority * 10 + (length(var.redirects) + 2)
+  priority = local.listener_priority * 10 + (length(local.redirects) + 2)
 
   action {
     type             = "forward"
@@ -104,13 +104,13 @@ resource "aws_lb_listener_rule" "this" {
 
   condition {
     host_header {
-      values = [var.host]
+      values = [local.host]
     }
   }
 
   condition {
     path_pattern {
-      values = ["${var.namespace}*"]
+      values = ["${local.namespace}*"]
     }
   }
 }

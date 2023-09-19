@@ -1,13 +1,13 @@
 resource "aws_appautoscaling_target" "this" {
-  max_capacity       = var.autoscaling_max_capacity
+  max_capacity       = local.autoscaling_max_capacity
   min_capacity       = 1
-  resource_id        = "service/${split("/", var.cluster_id)[1]}/${var.name}"
+  resource_id        = local.autoscaling_resource_id
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }
 
 resource "aws_appautoscaling_policy" "cpu" {
-  name               = var.name
+  name               = local.name
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.this.resource_id
   service_namespace  = aws_appautoscaling_target.this.service_namespace
@@ -17,7 +17,7 @@ resource "aws_appautoscaling_policy" "cpu" {
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
-    target_value = var.autoscaling_cpu_threshold
+    target_value = local.autoscaling_cpu_threshold
   }
 }
 

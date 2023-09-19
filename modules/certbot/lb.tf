@@ -1,9 +1,9 @@
 resource "aws_lb_target_group" "this" {
   name_prefix          = "certs-"
-  port                 = var.port
+  port                 = local.port
   protocol             = "HTTP"
-  vpc_id               = var.vpc_id
-  target_type          = var.target_type
+  vpc_id               = local.vpc_id
+  target_type          = local.target_type
   deregistration_delay = 0
 
   health_check {
@@ -26,7 +26,7 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_lb_listener_rule" "this" {
-  listener_arn = var.listener_arn
+  listener_arn = local.listener_arn
 
   action {
     type             = "forward"
@@ -35,7 +35,7 @@ resource "aws_lb_listener_rule" "this" {
 
   condition {
     host_header {
-      values = [var.hostname]
+      values = [local.hostname]
     }
   }
 
