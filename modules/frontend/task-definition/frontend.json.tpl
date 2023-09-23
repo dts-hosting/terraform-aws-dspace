@@ -4,6 +4,7 @@
     "image": "${img}",
     "networkMode": "${network_mode}",
     "essential": true,
+    "command": ["pm2-runtime", "start", "dspace-ui.json", "--json", "--max-memory-restart ${max_memory_restart}M"],
     "environment": [
       %{ for name, value in custom_env_cfg }
       {

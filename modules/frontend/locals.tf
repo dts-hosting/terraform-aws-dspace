@@ -15,6 +15,7 @@ locals {
   listener_arn              = var.listener_arn
   listener_priority         = var.listener_priority
   max_old_space_size        = var.max_old_space_size
+  max_memory_restart        = var.max_old_space_size - 128
   memory                    = var.memory
   name                      = var.name
   namespace                 = var.namespace
@@ -40,6 +41,7 @@ locals {
     bind               = "0.0.0.0"
     img                = local.img
     log_group          = aws_cloudwatch_log_group.this.name
+    max_memory_restart = local.max_memory_restart
     memory             = local.max_old_space_size
     name               = local.name
     namespace          = local.namespace
