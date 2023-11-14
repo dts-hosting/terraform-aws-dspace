@@ -19,6 +19,7 @@ locals {
   name                      = var.name
   namespace                 = var.namespace
   network_mode              = var.network_mode
+  placement_strategies      = var.placement_strategies
   port                      = var.port
   redirects                 = var.redirects
   requires_compatibilities  = var.requires_compatibilities

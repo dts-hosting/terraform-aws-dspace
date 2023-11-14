@@ -10,6 +10,7 @@ locals {
   memory                     = var.memory
   name                       = var.name
   network_mode               = var.network_mode
+  placement_strategies       = var.placement_strategies
   port                       = var.port
   requires_compatibilities   = var.requires_compatibilities
   security_group_id          = var.security_group_id
