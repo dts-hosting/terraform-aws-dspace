@@ -58,6 +58,15 @@ variable "network_mode" {
   default = "awsvpc"
 }
 
+variable "placement_strategies" {
+  default = {
+    pack-by-memory = {
+      field = "memory"
+      type  = "binpack"
+    }
+  }
+}
+
 variable "port" {
   description = "Certbot port"
   default     = 80
