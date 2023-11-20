@@ -95,7 +95,7 @@ module "backend" {
   frontend_url      = "https://${local.name}.${var.domain}"
   host              = "${local.name}.${var.domain}"
   img               = var.backend_img
-  listener_arn      = module.alb.https_listener_arns[0]
+  listener_arn      = module.alb.listeners["https"].arn
   listener_priority = 1
   name              = "${local.name}-backend"
   namespace         = "/server"
@@ -112,7 +112,7 @@ module "frontend" {
   cluster_id        = module.ecs.cluster_id
   host              = "${local.name}.${var.domain}"
   img               = var.frontend_img
-  listener_arn      = module.alb.https_listener_arns[0]
+  listener_arn      = module.alb.listeners["https"].arn
   listener_priority = 2
   name              = "${local.name}-frontend"
   namespace         = "/"
@@ -129,7 +129,7 @@ module "frontend" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
+  version = "5.2.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -151,7 +151,7 @@ module "vpc" {
 
 module "alb_sg" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 4.0"
+  version = "5.1.0"
 
   name        = "${local.name}-alb"
   description = "ALB security group"
@@ -186,7 +186,7 @@ module "alb_sg" {
 
 module "dspace_sg" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 4.0"
+  version = "5.1.0"
 
   name        = "${local.name}-dspace"
   description = "Complete DSpace example security group"
@@ -244,7 +244,7 @@ module "dspace_sg" {
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 8.0"
+  version = "9.2.0"
 
   name               = local.name
   load_balancer_type = "application"
@@ -254,42 +254,40 @@ module "alb" {
   security_groups       = [module.alb_sg.security_group_id]
   create_security_group = false
 
-  # Fixed responses for default actions
-  http_tcp_listeners = [
-    {
+  listeners = {
+    http = {
+      action_type = "redirect"
       port        = 80
       protocol    = "HTTP"
-      action_type = "redirect"
 
       redirect = {
         port        = "443"
         protocol    = "HTTPS"
         status_code = "HTTP_301"
       }
-    },
-  ]
+    }
 
-  https_listeners = [
-    {
+    https = {
+      action_type     = "fixed-response"
+      certificate_arn = data.aws_acm_certificate.issued.arn
       port            = 443
       protocol        = "HTTPS"
-      certificate_arn = data.aws_acm_certificate.issued.arn
-      action_type     = "fixed-response"
+      ssl_policy      = "ELBSecurityPolicy-2016-08"
 
       fixed_response = {
         content_type = "text/plain"
         message_body = "Nothing to see here!"
         status_code  = "200"
       }
-    },
-  ]
+    }
+  }
 
   tags = local.tags
 }
 
 module "efs" {
   source  = "terraform-aws-modules/efs/aws"
-  version = "~> 1.0"
+  version = "1.3.1"
 
   # File system
   name      = local.name
@@ -354,7 +352,7 @@ module "efs" {
 
 module "ecs" {
   source  = "terraform-aws-modules/ecs/aws"
-  version = "~> 4.0"
+  version = "5.7.2"
 
   cluster_name = local.name
 
@@ -377,7 +375,7 @@ module "ecs" {
 
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "~> 5.0"
+  version = "6.3.0"
 
   identifier = local.name
 
@@ -394,10 +392,10 @@ module "db" {
   password = aws_ssm_parameter.db_password.value
   username = aws_ssm_parameter.db_username.value
 
-  create_random_password = false
-  multi_az               = false
-  db_subnet_group_name   = module.vpc.database_subnet_group
-  vpc_security_group_ids = [module.dspace_sg.security_group_id]
+  manage_master_user_password = false
+  multi_az                    = false
+  db_subnet_group_name        = module.vpc.database_subnet_group
+  vpc_security_group_ids      = [module.dspace_sg.security_group_id]
 
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
   create_cloudwatch_log_group     = true
@@ -425,8 +423,8 @@ resource "aws_route53_record" "this" {
   type    = "A"
 
   alias {
-    name                   = module.alb.lb_dns_name
-    zone_id                = module.alb.lb_zone_id
+    name                   = module.alb.dns_name
+    zone_id                = module.alb.zone_id
     evaluate_target_health = false
   }
 }
