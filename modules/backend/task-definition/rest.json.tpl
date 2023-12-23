@@ -66,6 +66,9 @@
   {
     "name": "backend",
     "image": "${img}",
+    %{ if capacity_provider == "EC2" }
+    "memory": ${memory_limit},
+    %{ endif ~}
     "networkMode": "${network_mode}",
     "essential": true,
     "entrypoint": [
@@ -113,7 +116,7 @@
       },
       {
         "name": "JAVA_OPTS",
-        "value": "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xss512k -Xmx${memory}m -Xms${memory}m"
+        "value": "-XX:+PerfDisableSharedMem -Xmx${memory}m -Xms${memory}m -Xss512k -Dfile.encoding=UTF-8 -Djava.awt.headless=true -server"
       },
       {
         "name": "LOGGING_CONFIG",
@@ -151,6 +154,12 @@
         "containerPath": "${dspace_dir}/assetstore"
       }
     ],
+    %{ if capacity_provider == "EC2" }
+    "linuxParameters": {
+        "maxSwap": ${swap_size},
+        "swappiness": 60
+    },
+    %{ endif ~}
     "dependsOn": [
       {
         "containerName": "pgcrypto",

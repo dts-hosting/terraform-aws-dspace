@@ -33,6 +33,7 @@ locals {
   security_group_id        = var.security_group_id
   solr_url                 = var.solr_url
   subnets                  = var.subnets
+  swap_size                = 2048
   tags                     = var.tags
   target_type              = var.target_type
   tasks                    = var.tasks
@@ -42,6 +43,7 @@ locals {
   task_config = {
     assetstore         = local.assetstore_volume
     backend_url        = local.backend_url
+    capacity_provider  = local.capacity_provider
     custom_env_cfg     = local.custom_env_cfg
     custom_secrets_cfg = local.custom_secrets_cfg
     db_host            = local.db_host
@@ -57,11 +59,13 @@ locals {
     log_group          = aws_cloudwatch_log_group.this.name
     log4j2_url         = local.log4j2_url
     memory             = local.dspace_xmx
+    memory_limit       = local.memory
     name               = local.name
     network_mode       = local.network_mode
     port               = local.port
     region             = data.aws_region.current.name
     solr_url           = local.solr_url
+    swap_size          = local.swap_size
     timezone           = local.timezone
   }
 }
