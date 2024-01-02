@@ -129,7 +129,7 @@ module "frontend" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.2.0"
+  version = "5.4.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -244,7 +244,7 @@ module "dspace_sg" {
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "9.2.0"
+  version = "9.4.0"
 
   name               = local.name
   load_balancer_type = "application"
@@ -352,7 +352,7 @@ module "efs" {
 
 module "ecs" {
   source  = "terraform-aws-modules/ecs/aws"
-  version = "5.7.3"
+  version = "5.7.4"
 
   cluster_name = local.name
 
