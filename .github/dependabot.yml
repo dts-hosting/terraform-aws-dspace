@@ -12,4 +12,4 @@ updates:
     groups:
       modules:
         patterns:
-          - terraform-aws-modules
+          - terraform-aws-modules*
