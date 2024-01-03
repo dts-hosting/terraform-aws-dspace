@@ -25,6 +25,10 @@
       {
         "name": "SOLR_JAVA_MEM",
         "value": "-Xms${memory}m -Xmx${memory}m"
+      },
+      {
+        "name": "SOLR_OPTS",
+        "value": "-Dsolr.lock.type=${lock_type}"
       }
     ],
     "portMappings": [
@@ -36,6 +40,13 @@
       {
         "sourceVolume": "${data}",
         "containerPath": "/var/solr"
+      }
+    ],
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 65000,
+        "hardLimit": 65000
       }
     ],
     "logConfiguration": {

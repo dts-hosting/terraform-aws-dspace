@@ -7,6 +7,7 @@ locals {
   efs_id                     = var.efs_id
   img                        = var.img
   instances                  = var.instances
+  lock_type                  = "native"
   memory                     = var.memory
   name                       = var.name
   network_mode               = var.network_mode
@@ -25,6 +26,7 @@ locals {
     container_port = local.port
     data           = local.data_volume
     img            = local.img
+    lock_type      = local.lock_type
     log_group      = aws_cloudwatch_log_group.this.name
     memory         = local.solr_java_mem
     network_mode   = local.network_mode
