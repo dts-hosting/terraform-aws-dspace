@@ -143,6 +143,11 @@ variable "solr_url" {
   description = "DSpace solr url"
 }
 
+variable "startup_script" {
+  description = "A script or command to run before starting the DSpace server"
+  default     = "date"
+}
+
 variable "subnets" {
   description = "Subnets"
 }
