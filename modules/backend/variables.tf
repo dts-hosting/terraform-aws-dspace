@@ -118,6 +118,7 @@ variable "network_mode" {
 }
 
 variable "placement_strategies" {
+  description = "Placement strategies (does not apply when capacity provider is FARGATE)"
   default = {
     pack-by-memory = {
       field = "memory"
