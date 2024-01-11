@@ -118,6 +118,7 @@ variable "network_mode" {
 }
 
 variable "placement_strategies" {
+  description = "Placement strategies (does not apply when capacity provider is FARGATE)"
   default = {
     pack-by-memory = {
       field = "memory"
@@ -141,6 +142,11 @@ variable "security_group_id" {
 
 variable "solr_url" {
   description = "DSpace solr url"
+}
+
+variable "startup_script" {
+  description = "A script or command to run before starting the DSpace server"
+  default     = "date"
 }
 
 variable "subnets" {

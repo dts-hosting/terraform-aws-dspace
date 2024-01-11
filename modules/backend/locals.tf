@@ -32,6 +32,7 @@ locals {
   requires_compatibilities = var.requires_compatibilities
   security_group_id        = var.security_group_id
   solr_url                 = var.solr_url
+  startup_script           = var.startup_script
   subnets                  = var.subnets
   swap_size                = 2048
   tags                     = var.tags
@@ -65,6 +66,7 @@ locals {
     port               = local.port
     region             = data.aws_region.current.name
     solr_url           = local.solr_url
+    startup_script     = local.startup_script
     swap_size          = local.swap_size
     timezone           = local.timezone
   }

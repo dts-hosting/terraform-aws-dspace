@@ -42,7 +42,7 @@ resource "aws_ecs_service" "this" {
   }
 
   dynamic "ordered_placement_strategy" {
-    for_each = local.placement_strategies
+    for_each = !strcontains(local.capacity_provider, "FARGATE") ? local.placement_strategies : {}
     content {
       field = ordered_placement_strategy.value.field
       type  = ordered_placement_strategy.value.type
