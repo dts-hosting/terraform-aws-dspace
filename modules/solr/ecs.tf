@@ -80,7 +80,13 @@ resource "aws_service_discovery_service" "this" {
   }
 
   health_check_custom_config {
-    failure_threshold = 5
+    # deprecated: see lifecycle ignore
+    failure_threshold = 1
+  }
+
+  lifecycle {
+    # https://github.com/hashicorp/terraform-provider-aws/issues/35559
+    ignore_changes = [health_check_custom_config]
   }
 }
 
