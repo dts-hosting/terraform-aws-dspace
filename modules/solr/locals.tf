@@ -19,6 +19,7 @@ locals {
   service_discovery_dns_type = var.service_discovery_dns_type
   solr_java_mem              = var.solr_java_mem
   subnets                    = var.subnets
+  swap_size                  = 1024
   tags                       = var.tags
   vpc_id                     = var.vpc_id
 
@@ -33,5 +34,6 @@ locals {
     name           = local.name
     port           = local.port
     region         = data.aws_region.current.name
+    swap_size      = local.swap_size
   }
 }
