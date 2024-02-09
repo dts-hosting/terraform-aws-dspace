@@ -30,11 +30,13 @@ locals {
   robots_txt                = var.robots_txt
   security_group_id         = var.security_group_id
   subnets                   = var.subnets
+  swap_size                 = 1024
   tags                      = var.tags
   target_type               = var.target_type
   vpc_id                    = var.vpc_id
 
   task_config = {
+    capacity_provider  = local.capacity_provider
     custom_env_cfg     = local.custom_env_cfg
     custom_secrets_cfg = local.custom_secrets_cfg
     env                = local.env
@@ -52,5 +54,6 @@ locals {
     rest_port          = local.rest_port
     rest_ssl           = local.rest_ssl
     ssl                = "false" # ssl termination handled by alb
+    swap_size          = local.swap_size
   }
 }

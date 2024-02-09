@@ -7,6 +7,7 @@ locals {
   cli_memory               = var.cli_memory
   cluster_id               = var.cluster_id
   cpu                      = var.cpu
+  ctqueues_volume          = "${local.name}-ctqueues"
   custom_env_cfg           = var.custom_env_cfg
   custom_secrets_cfg       = var.custom_secrets_cfg
   db_host                  = var.db_host
@@ -45,6 +46,7 @@ locals {
     assetstore         = local.assetstore_volume
     backend_url        = local.backend_url
     capacity_provider  = local.capacity_provider
+    ctqueues           = local.ctqueues_volume
     custom_env_cfg     = local.custom_env_cfg
     custom_secrets_cfg = local.custom_secrets_cfg
     db_host            = local.db_host
