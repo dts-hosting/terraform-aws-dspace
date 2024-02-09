@@ -36,6 +36,7 @@ locals {
   vpc_id                    = var.vpc_id
 
   task_config = {
+    capacity_provider  = local.capacity_provider
     custom_env_cfg     = local.custom_env_cfg
     custom_secrets_cfg = local.custom_secrets_cfg
     env                = local.env

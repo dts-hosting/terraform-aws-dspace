@@ -24,16 +24,17 @@ locals {
   vpc_id                     = var.vpc_id
 
   task_config = {
-    container_port = local.port
-    data           = local.data_volume
-    img            = local.img
-    lock_type      = local.lock_type
-    log_group      = aws_cloudwatch_log_group.this.name
-    memory         = local.solr_java_mem
-    network_mode   = local.network_mode
-    name           = local.name
-    port           = local.port
-    region         = data.aws_region.current.name
-    swap_size      = local.swap_size
+    capacity_provider = local.capacity_provider
+    container_port    = local.port
+    data              = local.data_volume
+    img               = local.img
+    lock_type         = local.lock_type
+    log_group         = aws_cloudwatch_log_group.this.name
+    memory            = local.solr_java_mem
+    network_mode      = local.network_mode
+    name              = local.name
+    port              = local.port
+    region            = data.aws_region.current.name
+    swap_size         = local.swap_size
   }
 }
