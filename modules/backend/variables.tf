@@ -71,6 +71,11 @@ variable "efs_id" {
   description = "EFS id"
 }
 
+variable "extra_policy_arns" {
+  description = "List of policy arns to be added to the required defaults"
+  default     = []
+}
+
 variable "frontend_url" {
   description = "DSpace frontend url"
 }

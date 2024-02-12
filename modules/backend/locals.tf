@@ -17,6 +17,7 @@ locals {
   dspace_name              = var.dspace_name
   dspace_xmx               = var.dspace_xmx
   efs_id                   = var.efs_id
+  extra_policy_arns        = var.extra_policy_arns
   frontend_url             = var.frontend_url
   host                     = var.host
   img                      = var.img
