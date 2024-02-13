@@ -23,14 +23,14 @@ resource "aws_iam_role" "this" {
 }
 EOF
 
-  managed_policy_arns = [
+  managed_policy_arns = concat([
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
     "arn:aws:iam::aws:policy/AmazonECS_FullAccess",
     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
     "arn:aws:iam::aws:policy/AmazonS3FullAccess",
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
     "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
-  ]
+  ], local.extra_policy_arns)
 
   inline_policy {
     name = "ECSTaskPassRole"
