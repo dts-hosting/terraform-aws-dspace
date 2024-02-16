@@ -5,21 +5,10 @@
     "networkMode": "${network_mode}",
     "essential": true,
     "workingDirectory": "/var/solr",
-    "entrypoint": [
+    "${cmd_type}": [
       "/bin/bash",
       "-c",
-      "${join(" ", [
-        "init-var-solr;",
-        "precreate-core authority /opt/solr/server/solr/configsets/authority;",
-        "cp -r /opt/solr/server/solr/configsets/authority/* authority;",
-        "precreate-core oai /opt/solr/server/solr/configsets/oai;",
-        "cp -r /opt/solr/server/solr/configsets/oai/* oai;",
-        "precreate-core search /opt/solr/server/solr/configsets/search;",
-        "cp -r /opt/solr/server/solr/configsets/search/* search;",
-        "precreate-core statistics /opt/solr/server/solr/configsets/statistics;",
-        "cp -r /opt/solr/server/solr/configsets/statistics/* statistics;",
-        "exec solr -f"
-      ])}"
+      "${join(" ", cmd_args)}"
     ],
     "environment": [
       {
@@ -60,7 +49,7 @@
       "options": {
         "awslogs-group": "${log_group}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "dspace"
+        "awslogs-stream-prefix": "${log_prefix}"
       }
     }
   }
