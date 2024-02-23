@@ -6,12 +6,24 @@
     "essential": true,
     "environment": [
       {
+        "name": "CONTACT_EMAIL",
+        "value": "${contact_email}"
+      },
+      {
+        "name": "CONTACT_NAME",
+        "value": "${contact_name}"
+      },
+      {
         "name": "HANDLE_HOST_IP",
         "value": "${host_ip}"
       },
       {
         "name": "HANDLE_SERVER_NAME",
         "value": "${server_name}"
+      },
+      {
+        "name": "ORG_NAME",
+        "value": "${org_name}"
       },
       {
         "name": "REPLICATION_ADMINS",
