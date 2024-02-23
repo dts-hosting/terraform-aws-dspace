@@ -1,6 +1,8 @@
 locals {
   capacity_provider               = "FARGATE"
   cluster_id                      = var.cluster_id
+  contact_email                   = var.contact_email
+  contact_name                    = var.contact_name
   cpu                             = var.cpu
   host_ip                         = var.host_ip
   img                             = var.img
@@ -8,6 +10,7 @@ locals {
   memory                          = var.memory
   name                            = var.name
   network_mode                    = "awsvpc"
+  org_name                        = var.org_name
   private_key_name                = var.private_key_name
   public_key_name                 = var.public_key_name
   replication_admins              = var.replication_admins
@@ -23,10 +26,13 @@ locals {
   vpc_id                          = var.vpc_id
 
   task_config = {
+    contact_email                   = local.contact_email
+    contact_name                    = local.contact_name
     host_ip                         = local.host_ip
     img                             = local.img
     log_group                       = aws_cloudwatch_log_group.this.name
     network_mode                    = local.network_mode
+    org_name                        = local.org_name
     private_key_name                = local.private_key_name
     public_key_name                 = local.public_key_name
     region                          = data.aws_region.current.name

@@ -9,6 +9,14 @@ variable "cpu" {
   default     = 256
 }
 
+variable "contact_email" {
+  description = "Contact email address"
+}
+
+variable "contact_name" {
+  description = "Contact name"
+}
+
 variable "host_ip" {
   description = "The host IP address for the handle server"
 }
@@ -28,6 +36,10 @@ variable "memory" {
 
 variable "name" {
   description = "AWS ECS resources name/alias (service name, task definition name etc.)"
+}
+
+variable "org_name" {
+  description = "Name of organization"
 }
 
 variable "private_key_name" {
