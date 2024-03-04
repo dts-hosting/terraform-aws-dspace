@@ -75,8 +75,8 @@
       "/bin/bash",
       "-c",
       "${join(" ", [
-        "${dspace_dir}/bin/dspace database migrate;",
         "${startup_script};",
+        "${dspace_dir}/bin/dspace database migrate;",
         "catalina.sh run"
       ])}"
     ],
