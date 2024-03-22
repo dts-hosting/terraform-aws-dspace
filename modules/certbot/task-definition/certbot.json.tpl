@@ -11,7 +11,7 @@
       },
       {
         "name": "CERTBOT_DOMAINS",
-        "value": "${hostname}"
+        "value": "${domains}"
       },
       {
         "name": "CERTBOT_EMAIL",

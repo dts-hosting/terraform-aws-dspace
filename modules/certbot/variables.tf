@@ -26,8 +26,9 @@ variable "enabled" {
   default     = true
 }
 
-variable "hostname" {
-  description = "Hostname to generate certificate for"
+variable "hostnames" {
+  type        = list(string)
+  description = "Hostnames to generate certificates for"
 }
 
 variable "img" {
