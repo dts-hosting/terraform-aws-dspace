@@ -5,7 +5,7 @@ locals {
   cpu                      = var.cpu
   email                    = var.email
   enabled                  = var.enabled
-  hostname                 = var.hostname
+  hostnames                = var.hostnames
   img                      = var.img
   instances                = var.instances
   lb_name                  = var.lb_name
@@ -24,7 +24,7 @@ locals {
   task_config = {
     email        = local.email
     enabled      = local.enabled ? "true" : "false"
-    hostname     = local.hostname
+    domains      = join(",", local.hostnames)
     img          = local.img
     lb_name      = local.lb_name
     port         = local.port

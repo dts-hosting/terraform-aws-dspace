@@ -122,7 +122,7 @@ module "certbot" {
   cluster_id        = data.aws_ecs_cluster.selected.id
   email             = "no-reply@${var.domain}"
   enabled           = true
-  hostname          = "${local.name}.${var.domain}"
+  hostnames         = ["${local.name}.${var.domain}"]
   lb_name           = var.lb_name
   listener_arn      = data.aws_lb_listener.http.arn
   name              = "${local.name}-certbot"

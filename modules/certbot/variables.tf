@@ -23,10 +23,12 @@ variable "email" {
 
 variable "enabled" {
   description = "Enable certbot cert generation (otherwise http -> https redirection only)"
+  default     = true
 }
 
-variable "hostname" {
-  description = "Hostname to generate certificate for"
+variable "hostnames" {
+  type        = list(string)
+  description = "Hostnames to generate certificates for"
 }
 
 variable "img" {
