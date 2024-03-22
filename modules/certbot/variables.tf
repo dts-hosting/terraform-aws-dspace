@@ -23,6 +23,7 @@ variable "email" {
 
 variable "enabled" {
   description = "Enable certbot cert generation (otherwise http -> https redirection only)"
+  default     = true
 }
 
 variable "hostname" {
