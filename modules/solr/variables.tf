@@ -24,6 +24,10 @@ variable "cmd_args" {
     "cp -r /opt/solr/server/solr/configsets/search/* search;",
     "precreate-core statistics /opt/solr/server/solr/configsets/statistics;",
     "cp -r /opt/solr/server/solr/configsets/statistics/* statistics;",
+    "precreate-core qaevent /opt/solr/server/solr/configsets/qaevent;",
+    "cp -r /opt/solr/server/solr/configsets/qaevent/* qaevent;",
+    "precreate-core suggestion /opt/solr/server/solr/configsets/suggestion;",
+    "cp -r /opt/solr/server/solr/configsets/suggestion/* suggestion;",
     "exec solr -f"
   ]
 }
