@@ -17,17 +17,17 @@ variable "cmd_args" {
   default = [
     "init-var-solr;",
     "precreate-core authority /opt/solr/server/solr/configsets/authority;",
-    "cp -r /opt/solr/server/solr/configsets/authority/* authority;",
+    "cp -r /opt/solr/server/solr/configsets/authority/* data/authority;",
     "precreate-core oai /opt/solr/server/solr/configsets/oai;",
-    "cp -r /opt/solr/server/solr/configsets/oai/* oai;",
+    "cp -r /opt/solr/server/solr/configsets/oai/* data/oai;",
     "precreate-core search /opt/solr/server/solr/configsets/search;",
-    "cp -r /opt/solr/server/solr/configsets/search/* search;",
+    "cp -r /opt/solr/server/solr/configsets/search/* data/search;",
     "precreate-core statistics /opt/solr/server/solr/configsets/statistics;",
-    "cp -r /opt/solr/server/solr/configsets/statistics/* statistics;",
+    "cp -r /opt/solr/server/solr/configsets/statistics/* data/statistics;",
     "precreate-core qaevent /opt/solr/server/solr/configsets/qaevent;",
-    "cp -r /opt/solr/server/solr/configsets/qaevent/* qaevent;",
+    "cp -r /opt/solr/server/solr/configsets/qaevent/* data/qaevent;",
     "precreate-core suggestion /opt/solr/server/solr/configsets/suggestion;",
-    "cp -r /opt/solr/server/solr/configsets/suggestion/* suggestion;",
+    "cp -r /opt/solr/server/solr/configsets/suggestion/* data/suggestion;",
     "exec solr -f"
   ]
 }
