@@ -1,7 +1,8 @@
 locals {
   assign_public_ip          = var.assign_public_ip
   autoscaling_cpu_threshold = var.autoscaling_cpu_threshold
-  autoscaling_max_capacity  = var.autoscaling_max_capacity
+  autoscaling_max_capacity  = max(var.autoscaling_max_capacity, local.autoscaling_min_capacity)
+  autoscaling_min_capacity  = var.autoscaling_min_capacity
   autoscaling_resource_id   = "service/${split("/", local.cluster_id)[1]}/${local.name}"
   capacity_provider         = var.capacity_provider
   cluster_id                = var.cluster_id
