@@ -14,6 +14,11 @@ variable "autoscaling_max_capacity" {
   default     = 1
 }
 
+variable "autoscaling_min_capacity" {
+  description = "The minimum number of instances that can be run"
+  default     = 1
+}
+
 variable "capacity_provider" {
   default = "FARGATE"
 }
