@@ -35,6 +35,7 @@ locals {
   requires_compatibilities = var.requires_compatibilities
   security_group_id        = var.security_group_id
   solr_url                 = var.solr_url
+  startup_db_cmd           = local.instances > 1 ? "info" : "migrate"
   startup_script           = var.startup_script
   subnets                  = var.subnets
   swap_size                = 2048
@@ -71,6 +72,7 @@ locals {
     port               = local.port
     region             = data.aws_region.current.name
     solr_url           = local.solr_url
+    startup_db_cmd     = local.startup_db_cmd
     startup_script     = local.startup_script
     swap_size          = local.swap_size
     timezone           = local.timezone
