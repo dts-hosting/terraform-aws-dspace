@@ -15,11 +15,6 @@ resource "aws_lb_target_group" "this" {
     matcher             = "200-299,301"
   }
 
-  stickiness {
-    enabled = true
-    type    = "lb_cookie"
-  }
-
   lifecycle {
     create_before_destroy = true
   }

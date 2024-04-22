@@ -22,6 +22,7 @@ locals {
   host                     = var.host
   img                      = var.img
   instances                = var.instances
+  jwt_token_secret         = random_bytes.jwt_token_secret.base64
   listener_arn             = var.listener_arn
   listener_priority        = var.listener_priority
   log4j2_url               = var.log4j2_url
@@ -60,6 +61,7 @@ locals {
     frontend_url       = local.frontend_url
     host               = local.host
     img                = local.img
+    jwt_token_secret   = local.jwt_token_secret
     log_group          = aws_cloudwatch_log_group.this.name
     log4j2_url         = local.log4j2_url
     memory             = local.dspace_xmx
