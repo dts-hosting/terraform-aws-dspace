@@ -1,5 +1,9 @@
 data "aws_region" "current" {}
 
+resource "random_bytes" "jwt_token_secret" {
+  length = 24 # 24 bytes because BASE64 encoding makes this 32 bytes
+}
+
 variable "assign_public_ip" {
   default = false
 }

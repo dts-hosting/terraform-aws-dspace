@@ -112,6 +112,14 @@
         "value": "${frontend_url}"
       },
       {
+        "name": "jwt__P__login__P__token__P__secret",
+        "value": "${jwt_token_secret}"
+      },
+      {
+        "name": "jwt__P__shortLived__P__token__P__secret",
+        "value": "${jwt_token_secret}"
+      },
+      {
         "name": "solr__P__server",
         "value": "${solr_url}"
       },
