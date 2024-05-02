@@ -36,6 +36,7 @@ locals {
   security_group_id        = var.security_group_id
   solr_url                 = var.solr_url
   startup_db_cmd           = local.instances > 1 ? "info" : "migrate"
+  startup_dspace_cmd       = var.startup_dspace_cmd
   startup_script           = var.startup_script
   subnets                  = var.subnets
   swap_size                = 2048
@@ -73,6 +74,7 @@ locals {
     region             = data.aws_region.current.name
     solr_url           = local.solr_url
     startup_db_cmd     = local.startup_db_cmd
+    startup_dspace_cmd = local.startup_dspace_cmd
     startup_script     = local.startup_script
     swap_size          = local.swap_size
     timezone           = local.timezone
