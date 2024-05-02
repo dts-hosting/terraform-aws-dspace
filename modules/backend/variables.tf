@@ -158,6 +158,11 @@ variable "startup_script" {
   default     = "date"
 }
 
+variable "startup_dspace_cmd" {
+  description = "Command to start the DSpace application server"
+  default     = "catalina.sh run"
+}
+
 variable "subnets" {
   description = "Subnets"
 }
