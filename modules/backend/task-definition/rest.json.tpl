@@ -66,9 +66,6 @@
   {
     "name": "backend",
     "image": "${img}",
-    %{ if capacity_provider == "EC2" }
-    "memory": ${memory_limit},
-    %{ endif ~}
     "networkMode": "${network_mode}",
     "essential": true,
     "entrypoint": [

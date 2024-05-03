@@ -67,7 +67,6 @@ locals {
     log_group          = aws_cloudwatch_log_group.this.name
     log4j2_url         = local.log4j2_url
     memory             = local.dspace_xmx
-    memory_limit       = local.memory
     name               = local.name
     network_mode       = local.network_mode
     port               = local.port
