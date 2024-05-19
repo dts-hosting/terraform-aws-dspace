@@ -6,8 +6,10 @@ resource "aws_appautoscaling_target" "this" {
   service_namespace  = "ecs"
 }
 
-resource "aws_appautoscaling_policy" "cpu" {
-  name               = local.name
+resource "aws_appautoscaling_policy" "this" {
+  for_each = local.autoscaling_configuration
+
+  name               = "${local.name}-${each.key}"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.this.resource_id
   service_namespace  = aws_appautoscaling_target.this.service_namespace
@@ -15,10 +17,8 @@ resource "aws_appautoscaling_policy" "cpu" {
 
   target_tracking_scaling_policy_configuration {
     predefined_metric_specification {
-      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+      predefined_metric_type = each.value.metric
     }
-    target_value = local.autoscaling_cpu_threshold
+    target_value = each.value.threshold
   }
 }
-
-# TODO: other policies may be added in the future
