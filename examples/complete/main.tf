@@ -375,7 +375,7 @@ module "ecs" {
 
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.6.0"
+  version = "6.7.0"
 
   identifier = local.name
 
