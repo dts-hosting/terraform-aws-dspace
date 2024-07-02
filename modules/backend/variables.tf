@@ -141,6 +141,11 @@ variable "port" {
   default     = 8080
 }
 
+variable "proxy_host" {
+  description = "Proxy host (optional)"
+  default     = null
+}
+
 variable "requires_compatibilities" {
   default = ["FARGATE"]
 }

@@ -20,6 +20,30 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+resource "aws_lb_target_group" "proxy" {
+  count = try(local.proxy_host, null) != null ? 1 : 0
+
+  name_prefix          = "proxy-"
+  port                 = local.proxy_port
+  protocol             = "HTTP"
+  vpc_id               = local.vpc_id
+  target_type          = local.target_type
+  deregistration_delay = 0
+
+  health_check {
+    path                = "/health"
+    interval            = 60
+    timeout             = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = "200-299,301"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_lb_listener_rule" "this" {
   listener_arn = local.listener_arn
   priority     = local.listener_priority * 10 # create gaps in sequence for frontend (uses: value * 10 + 1)
@@ -32,6 +56,37 @@ resource "aws_lb_listener_rule" "this" {
   condition {
     host_header {
       values = [local.host]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["${local.namespace}*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "proxy" {
+  count = try(local.proxy_host, null) != null ? 1 : 0
+
+  listener_arn = local.listener_arn
+  priority     = local.listener_priority * 10 - 1
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.proxy[count.index].arn
+  }
+
+  condition {
+    host_header {
+      values = [local.host]
+    }
+  }
+
+  condition {
+    http_header {
+      http_header_name = "Referer"
+      values           = ["https://${local.proxy_host}/"]
     }
   }
 

@@ -63,6 +63,39 @@
       }
     ]
   },
+%{ if proxy_host != null }
+  {
+    "name": "proxy",
+    "image": "${proxy_img}",
+    "networkMode": "${network_mode}",
+    "essential": true,
+    "environment": [
+      {
+        "name": "PROXY_HOST",
+        "value": "${proxy_host}"
+      }
+    ],
+    "portMappings": [
+      {
+        "containerPort": ${proxy_port}
+      }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "backend",
+        "condition": "START"
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group}",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "dspace"
+      }
+    }
+  },
+%{ endif ~}
   {
     "name": "backend",
     "image": "${img}",

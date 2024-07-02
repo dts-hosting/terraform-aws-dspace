@@ -1,0 +1,27 @@
+server {
+  server_name _;
+
+  listen 4000;
+  listen [::]:4000;
+
+  location / {
+    if ($request_method = 'OPTIONS') {
+      add_header 'Access-Control-Allow-Origin' 'https://${PROXY_HOST}';
+      add_header 'Access-Control-Allow-Credentials' 'true';
+      add_header 'Access-Control-Allow-Methods' '*';
+      add_header 'Access-Control-Allow-Headers' '*';
+      add_header 'Access-Control-Max-Age' 86400;
+      add_header 'Content-Type' 'text/plain charset=UTF-8';
+      add_header 'Content-Length' 0;
+      return 204; break;
+    }
+
+    proxy_set_header Referer "";
+    proxy_pass https://${PROXY_HOST}/;
+  }
+
+  location /health {
+    default_type text/html;
+    return 200 "<!DOCTYPE html><h1>Not too bad!</h1>\n";
+  }
+}

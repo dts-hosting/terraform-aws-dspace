@@ -60,6 +60,15 @@ resource "aws_ecs_service" "this" {
     target_group_arn = aws_lb_target_group.this.arn
   }
 
+  dynamic "load_balancer" {
+    for_each = local.proxy_host != null ? ["true"] : []
+    content {
+      container_name   = "proxy"
+      container_port   = local.proxy_port
+      target_group_arn = aws_lb_target_group.proxy[0].arn
+    }
+  }
+
   dynamic "network_configuration" {
     for_each = local.network_mode == "awsvpc" ? ["true"] : []
     content {

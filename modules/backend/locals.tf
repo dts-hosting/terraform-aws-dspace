@@ -32,6 +32,9 @@ locals {
   network_mode             = var.network_mode
   placement_strategies     = var.placement_strategies
   port                     = var.port
+  proxy_host               = var.proxy_host
+  proxy_img                = "lyrasis/dspace-proxy:latest"
+  proxy_port               = 4000
   requires_compatibilities = var.requires_compatibilities
   security_group_id        = var.security_group_id
   solr_url                 = var.solr_url
@@ -70,6 +73,9 @@ locals {
     name               = local.name
     network_mode       = local.network_mode
     port               = local.port
+    proxy_host         = local.proxy_host
+    proxy_img          = local.proxy_img
+    proxy_port         = local.proxy_port
     region             = data.aws_region.current.name
     solr_url           = local.solr_url
     startup_db_cmd     = local.startup_db_cmd

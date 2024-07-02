@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  dspace-proxy:
+    build:
+      context: .
+    environment:
+      PROXY_HOST: ${PROXY_HOST:-www.example.com}
+    network_mode: host
