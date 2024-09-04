@@ -129,7 +129,7 @@ module "frontend" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.9.0"
+  version = "5.13.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -151,7 +151,7 @@ module "vpc" {
 
 module "alb_sg" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.2"
+  version = "5.2.0"
 
   name        = "${local.name}-alb"
   description = "ALB security group"
@@ -186,7 +186,7 @@ module "alb_sg" {
 
 module "dspace_sg" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.2"
+  version = "5.2.0"
 
   name        = "${local.name}-dspace"
   description = "Complete DSpace example security group"
@@ -244,7 +244,7 @@ module "dspace_sg" {
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "9.10.0"
+  version = "9.11.0"
 
   name               = local.name
   load_balancer_type = "application"
@@ -352,7 +352,7 @@ module "efs" {
 
 module "ecs" {
   source  = "terraform-aws-modules/ecs/aws"
-  version = "5.11.3"
+  version = "5.11.4"
 
   cluster_name = local.name
 
@@ -375,7 +375,7 @@ module "ecs" {
 
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.8.0"
+  version = "6.9.0"
 
   identifier = local.name
 
