@@ -73,11 +73,6 @@ variable "listener_priority" {
   description = "ALB (https) listener priority (actual value is: int * 10 + 1)"
 }
 
-variable "max_old_space_size" {
-  description = "Container level memory allocation (frontend / node)"
-  default     = 768
-}
-
 variable "memory" {
   description = "Task level memory allocation (hard limit)"
   default     = 1024
@@ -93,6 +88,11 @@ variable "namespace" {
 
 variable "network_mode" {
   default = "awsvpc"
+}
+
+variable "node_options" {
+  description = "Node options"
+  default     = "--max-old-space-size=768"
 }
 
 variable "placement_strategies" {

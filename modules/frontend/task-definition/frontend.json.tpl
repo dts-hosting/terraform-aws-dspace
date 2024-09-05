@@ -49,7 +49,7 @@
       },
       {
         "name": "NODE_OPTIONS",
-        "value": "--max-old-space-size=${memory}"
+        "value": "${node_options}"
       }
     ],
     "secrets": [
