@@ -90,6 +90,11 @@ variable "network_mode" {
   default = "awsvpc"
 }
 
+variable "node_cmd" {
+  description = "Node cmd"
+  default     = "node /app/dist/server/main.js"
+}
+
 variable "node_options" {
   description = "Node options"
   default     = "--max-old-space-size=768"

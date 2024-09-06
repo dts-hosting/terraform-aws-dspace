@@ -18,6 +18,7 @@ locals {
   name                     = var.name
   namespace                = var.namespace
   network_mode             = var.network_mode
+  node_cmd                 = var.node_cmd
   node_options             = var.node_options
   placement_strategies     = var.placement_strategies
   port                     = var.port
@@ -57,6 +58,7 @@ locals {
     name               = local.name
     namespace          = local.namespace
     network_mode       = local.network_mode
+    node_cmd           = local.node_cmd
     node_options       = local.node_options
     port               = local.port
     region             = data.aws_region.current.name
