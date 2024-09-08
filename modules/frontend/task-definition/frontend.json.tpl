@@ -4,6 +4,11 @@
     "image": "${img}",
     "networkMode": "${network_mode}",
     "essential": true,
+    "command": [
+      "/bin/sh",
+      "-c",
+      "${node_cmd}"
+    ],
     "environment": [
       %{ for name, value in custom_env_cfg }
       {
@@ -49,7 +54,7 @@
       },
       {
         "name": "NODE_OPTIONS",
-        "value": "--max-old-space-size=${memory}"
+        "value": "${node_options}"
       }
     ],
     "secrets": [

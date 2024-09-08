@@ -14,11 +14,12 @@ locals {
   instances                = var.instances
   listener_arn             = var.listener_arn
   listener_priority        = var.listener_priority
-  max_old_space_size       = var.max_old_space_size
   memory                   = var.memory
   name                     = var.name
   namespace                = var.namespace
   network_mode             = var.network_mode
+  node_cmd                 = var.node_cmd
+  node_options             = var.node_options
   placement_strategies     = var.placement_strategies
   port                     = var.port
   redirects                = var.redirects
@@ -54,10 +55,11 @@ locals {
     bind               = "0.0.0.0"
     img                = local.img
     log_group          = aws_cloudwatch_log_group.this.name
-    memory             = local.max_old_space_size
     name               = local.name
     namespace          = local.namespace
     network_mode       = local.network_mode
+    node_cmd           = local.node_cmd
+    node_options       = local.node_options
     port               = local.port
     region             = data.aws_region.current.name
     rest_host          = local.rest_host
