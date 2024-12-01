@@ -86,6 +86,9 @@
         "containerPath": "${dspace_dir}/ctqueues"
       }
     ],
+    "EphemeralStorage": {
+      "SizeInGiB" : 100
+    },
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
