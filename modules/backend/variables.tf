@@ -26,6 +26,11 @@ variable "cli_memory" {
   default     = 3072
 }
 
+variable "cli_storage" {
+  description = "Task level storage allocation for cli"
+  default     = 100
+}
+
 variable "cluster_id" {
   description = "ECS cluster id"
 }
