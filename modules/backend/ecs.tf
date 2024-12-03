@@ -9,6 +9,13 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn       = aws_iam_role.this.arn
   task_role_arn            = aws_iam_role.this.arn
 
+  dynamic "ephemeral_storage" {
+    for_each = each.key == "cli" ? ["true"] : []
+    content {
+      size_in_gib = local.cli_storage
+    }
+  }
+
   container_definitions = templatefile("${path.module}/task-definition/${each.key}.json.tpl", local.task_config)
 
   volume {

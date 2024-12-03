@@ -4,9 +4,6 @@
     "image": "${img}",
     "networkMode": "awsvpc",
     "essential": true,
-    "ephemeralStorage": {
-      "sizeInGiB" : 100
-    },
     "environment": [
       %{ for name, value in custom_env_cfg }
       {

@@ -5,6 +5,7 @@ locals {
   capacity_provider        = var.capacity_provider
   cli_cpu                  = var.cli_cpu
   cli_memory               = var.cli_memory
+  cli_storage              = var.cli_storage
   cluster_id               = var.cluster_id
   cpu                      = var.cpu
   ctqueues_volume          = "${local.name}-ctqueues"
