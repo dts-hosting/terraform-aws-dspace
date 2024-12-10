@@ -21,6 +21,7 @@ locals {
   extra_policy_arns        = var.extra_policy_arns
   frontend_url             = var.frontend_url
   host                     = var.host
+  iam_ecs_task_role_arn    = var.iam_ecs_task_role_arn
   img                      = var.img
   instances                = var.instances
   jwt_token_secret         = random_bytes.jwt_token_secret.base64

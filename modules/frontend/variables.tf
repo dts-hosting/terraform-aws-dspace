@@ -56,6 +56,10 @@ variable "host" {
   description = "DSpace frontend host"
 }
 
+variable "iam_ecs_task_role_arn" {
+  description = "The ARN of the IAM role to use for task execution"
+}
+
 variable "img" {
   description = "DSpace frontend docker img"
 }
