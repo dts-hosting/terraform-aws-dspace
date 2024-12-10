@@ -11,7 +11,7 @@ resource "aws_cloudwatch_event_target" "this" {
   target_id = "${local.name}-${each.key}"
   arn       = local.cluster_id
   rule      = aws_cloudwatch_event_rule.this[each.key].name
-  role_arn  = aws_iam_role.this.arn
+  role_arn  = local.iam_ecs_task_role_arn
 
   ecs_target {
     launch_type         = "FARGATE"

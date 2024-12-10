@@ -6,8 +6,8 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = each.key == "cli" ? ["FARGATE"] : local.requires_compatibilities
   cpu                      = each.key == "cli" ? local.cli_cpu : local.cpu
   memory                   = each.key == "cli" ? local.cli_memory : local.memory
-  execution_role_arn       = aws_iam_role.this.arn
-  task_role_arn            = aws_iam_role.this.arn
+  execution_role_arn       = local.iam_ecs_task_role_arn
+  task_role_arn            = local.iam_ecs_task_role_arn
 
   dynamic "ephemeral_storage" {
     for_each = each.key == "cli" ? ["true"] : []

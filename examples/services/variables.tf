@@ -54,6 +54,10 @@ data "aws_efs_file_system" "selected" {
   }
 }
 
+data "aws_iam_role" "ecs_task_role" {
+  name = "dspace-dcsp-production-ECSTaskRole"
+}
+
 data "aws_lb" "selected" {
   name = var.lb_name
 }

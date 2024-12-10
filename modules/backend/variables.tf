@@ -93,6 +93,10 @@ variable "host" {
   description = "DSpace backend host"
 }
 
+variable "iam_ecs_task_role_arn" {
+  description = "ARN for ECS task role"
+}
+
 variable "img" {
   description = "DSpace backend docker img"
 }
