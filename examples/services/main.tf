@@ -45,15 +45,16 @@ locals {
 module "solr" {
   source = "../../modules/solr"
 
-  cluster_id           = data.aws_ecs_cluster.selected.id
-  cpu                  = null
-  efs_id               = data.aws_efs_file_system.selected.id
-  img                  = var.solr_img
-  name                 = "${local.name}-solr"
-  security_group_id    = data.aws_security_group.selected.id
-  service_discovery_id = data.aws_service_discovery_dns_namespace.solr.id
-  subnets              = data.aws_subnets.selected.ids
-  vpc_id               = data.aws_vpc.selected.id
+  cluster_id            = data.aws_ecs_cluster.selected.id
+  cpu                   = null
+  efs_id                = data.aws_efs_file_system.selected.id
+  iam_ecs_task_role_arn = data.aws_iam_role.ecs_task_role.arn
+  img                   = var.solr_img
+  name                  = "${local.name}-solr"
+  security_group_id     = data.aws_security_group.selected.id
+  service_discovery_id  = data.aws_service_discovery_dns_namespace.solr.id
+  subnets               = data.aws_subnets.selected.ids
+  vpc_id                = data.aws_vpc.selected.id
 
   # networking (tests Solr on ec2 with service discovery)
   capacity_provider        = "EC2"

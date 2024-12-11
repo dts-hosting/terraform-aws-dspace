@@ -4,8 +4,8 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = local.requires_compatibilities
   cpu                      = local.cpu
   memory                   = local.memory
-  execution_role_arn       = aws_iam_role.this.arn
-  task_role_arn            = aws_iam_role.this.arn
+  execution_role_arn       = local.iam_ecs_task_role_arn
+  task_role_arn            = local.iam_ecs_task_role_arn
 
   container_definitions = templatefile("${path.module}/task-definition/solr.json.tpl", local.task_config)
 
