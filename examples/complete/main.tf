@@ -48,12 +48,17 @@ data "aws_route53_zone" "selected" {
   name     = "${var.domain}."
 }
 
+data "aws_iam_role" "ecs_task_role" {
+  name = local.iam_ecs_task_role_name
+}
+
 locals {
   name   = "dspace-ex-${basename(path.cwd)}"
   region = "us-west-2"
 
-  vpc_cidr = "10.99.0.0/18"
-  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+  iam_ecs_task_role_arn = "dspace-dcsp-production-ECSTaskRole"
+  vpc_cidr              = "10.99.0.0/18"
+  azs                   = slice(data.aws_availability_zones.available.names, 0, 3)
 
   db_engine  = "postgres"
   db_version = 14
@@ -72,55 +77,58 @@ locals {
 module "solr" {
   source = "../../modules/solr"
 
-  cluster_id           = module.ecs.cluster_id
-  efs_id               = module.efs.id
-  img                  = var.solr_img
-  name                 = "${local.name}-solr"
-  security_group_id    = module.dspace_sg.security_group_id
-  service_discovery_id = aws_service_discovery_private_dns_namespace.this.id
-  subnets              = module.vpc.private_subnets
-  vpc_id               = module.vpc.vpc_id
+  cluster_id            = module.ecs.cluster_id
+  efs_id                = module.efs.id
+  iam_ecs_task_role_arn = data.aws_iam_role.ecs_task_role.arn
+  img                   = var.solr_img
+  name                  = "${local.name}-solr"
+  security_group_id     = module.dspace_sg.security_group_id
+  service_discovery_id  = aws_service_discovery_private_dns_namespace.this.id
+  subnets               = module.vpc.private_subnets
+  vpc_id                = module.vpc.vpc_id
 }
 
 module "backend" {
   source = "../../modules/backend"
 
-  backend_url       = "https://${local.name}.${var.domain}/server"
-  cluster_id        = module.ecs.cluster_id
-  db_host           = module.db.db_instance_address
-  db_name           = "dspace"
-  db_password_arn   = aws_ssm_parameter.db_password.arn
-  db_username_arn   = aws_ssm_parameter.db_username.arn
-  efs_id            = module.efs.id
-  frontend_url      = "https://${local.name}.${var.domain}"
-  host              = "${local.name}.${var.domain}"
-  img               = var.backend_img
-  listener_arn      = module.alb.listeners["https"].arn
-  listener_priority = 1
-  name              = "${local.name}-backend"
-  namespace         = "/server"
-  security_group_id = module.dspace_sg.security_group_id
-  solr_url          = "http://${local.name}-solr.dspace.solr:8983/solr"
-  subnets           = module.vpc.private_subnets
-  timezone          = "America/New_York"
-  vpc_id            = module.vpc.vpc_id
+  backend_url           = "https://${local.name}.${var.domain}/server"
+  cluster_id            = module.ecs.cluster_id
+  db_host               = module.db.db_instance_address
+  db_name               = "dspace"
+  db_password_arn       = aws_ssm_parameter.db_password.arn
+  db_username_arn       = aws_ssm_parameter.db_username.arn
+  efs_id                = module.efs.id
+  frontend_url          = "https://${local.name}.${var.domain}"
+  host                  = "${local.name}.${var.domain}"
+  iam_ecs_task_role_arn = data.aws_iam_role.ecs_task_role.arn
+  img                   = var.backend_img
+  listener_arn          = module.alb.listeners["https"].arn
+  listener_priority     = 1
+  name                  = "${local.name}-backend"
+  namespace             = "/server"
+  security_group_id     = module.dspace_sg.security_group_id
+  solr_url              = "http://${local.name}-solr.dspace.solr:8983/solr"
+  subnets               = module.vpc.private_subnets
+  timezone              = "America/New_York"
+  vpc_id                = module.vpc.vpc_id
 }
 
 module "frontend" {
   source = "../../modules/frontend"
 
-  cluster_id        = module.ecs.cluster_id
-  host              = "${local.name}.${var.domain}"
-  img               = var.frontend_img
-  listener_arn      = module.alb.listeners["https"].arn
-  listener_priority = 2
-  name              = "${local.name}-frontend"
-  namespace         = "/"
-  rest_host         = "${local.name}.${var.domain}"
-  rest_namespace    = "/server"
-  security_group_id = module.dspace_sg.security_group_id
-  subnets           = module.vpc.private_subnets
-  vpc_id            = module.vpc.vpc_id
+  cluster_id            = module.ecs.cluster_id
+  host                  = "${local.name}.${var.domain}"
+  iam_ecs_task_role_arn = data.aws_iam_role.ecs_task_role.arn
+  img                   = var.frontend_img
+  listener_arn          = module.alb.listeners["https"].arn
+  listener_priority     = 2
+  name                  = "${local.name}-frontend"
+  namespace             = "/"
+  rest_host             = "${local.name}.${var.domain}"
+  rest_namespace        = "/server"
+  security_group_id     = module.dspace_sg.security_group_id
+  subnets               = module.vpc.private_subnets
+  vpc_id                = module.vpc.vpc_id
 }
 
 ################################################################################

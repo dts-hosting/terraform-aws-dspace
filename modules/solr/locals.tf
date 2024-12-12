@@ -8,6 +8,7 @@ locals {
   data_volume                = "${local.name}${local.efs_volume_suffix}"
   efs_id                     = var.efs_id
   efs_volume_suffix          = var.efs_volume_suffix
+  iam_ecs_task_role_arn      = var.iam_ecs_task_role_arn
   img                        = var.img
   instances                  = var.instances
   lock_type                  = "native"

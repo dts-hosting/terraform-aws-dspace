@@ -45,15 +45,16 @@ locals {
 module "solr" {
   source = "../../modules/solr"
 
-  cluster_id           = data.aws_ecs_cluster.selected.id
-  cpu                  = null
-  efs_id               = data.aws_efs_file_system.selected.id
-  img                  = var.solr_img
-  name                 = "${local.name}-solr"
-  security_group_id    = data.aws_security_group.selected.id
-  service_discovery_id = data.aws_service_discovery_dns_namespace.solr.id
-  subnets              = data.aws_subnets.selected.ids
-  vpc_id               = data.aws_vpc.selected.id
+  cluster_id            = data.aws_ecs_cluster.selected.id
+  cpu                   = null
+  efs_id                = data.aws_efs_file_system.selected.id
+  iam_ecs_task_role_arn = data.aws_iam_role.ecs_task_role.arn
+  img                   = var.solr_img
+  name                  = "${local.name}-solr"
+  security_group_id     = data.aws_security_group.selected.id
+  service_discovery_id  = data.aws_service_discovery_dns_namespace.solr.id
+  subnets               = data.aws_subnets.selected.ids
+  vpc_id                = data.aws_vpc.selected.id
 
   # networking (tests Solr on ec2 with service discovery)
   capacity_provider        = "EC2"
@@ -64,24 +65,25 @@ module "solr" {
 module "backend" {
   source = "../../modules/backend"
 
-  backend_url       = "https://${local.name}.${var.domain}/server"
-  cluster_id        = data.aws_ecs_cluster.selected.id
-  db_host           = var.db_host
-  db_name           = var.db_name
-  db_password_arn   = var.db_password_param
-  db_username_arn   = var.db_username_param
-  efs_id            = data.aws_efs_file_system.selected.id
-  frontend_url      = "https://${local.name}.${var.domain}"
-  host              = "${local.name}.${var.domain}"
-  img               = var.backend_img
-  listener_arn      = data.aws_lb_listener.selected.arn
-  listener_priority = 4999
-  log4j2_url        = "https://raw.githubusercontent.com/dts-hosting/terraform-aws-dspace/main/files/log4j2-container.xml" # TODO: rm when PR merged
-  name              = "${local.name}-backend"
-  namespace         = "/server"
-  security_group_id = data.aws_security_group.selected.id
-  solr_url          = "http://${local.name}-solr.${var.solr_discovery_namespace}:8983/solr"
-  subnets           = data.aws_subnets.selected.ids
+  backend_url           = "https://${local.name}.${var.domain}/server"
+  cluster_id            = data.aws_ecs_cluster.selected.id
+  db_host               = var.db_host
+  db_name               = var.db_name
+  db_password_arn       = var.db_password_param
+  db_username_arn       = var.db_username_param
+  efs_id                = data.aws_efs_file_system.selected.id
+  frontend_url          = "https://${local.name}.${var.domain}"
+  host                  = "${local.name}.${var.domain}"
+  iam_ecs_task_role_arn = data.aws_iam_role.ecs_task_role.arn
+  img                   = var.backend_img
+  listener_arn          = data.aws_lb_listener.selected.arn
+  listener_priority     = 4999
+  log4j2_url            = "https://raw.githubusercontent.com/dts-hosting/terraform-aws-dspace/main/files/log4j2-container.xml" # TODO: rm when PR merged
+  name                  = "${local.name}-backend"
+  namespace             = "/server"
+  security_group_id     = data.aws_security_group.selected.id
+  solr_url              = "http://${local.name}-solr.${var.solr_discovery_namespace}:8983/solr"
+  subnets               = data.aws_subnets.selected.ids
   tasks = {
     reindex = {
       args     = ["/dspace/bin/dspace", "index-discovery", "-b"]
@@ -95,18 +97,19 @@ module "backend" {
 module "frontend" {
   source = "../../modules/frontend"
 
-  cluster_id        = data.aws_ecs_cluster.selected.id
-  host              = "${local.name}.${var.domain}"
-  img               = var.frontend_img
-  listener_arn      = data.aws_lb_listener.selected.arn
-  listener_priority = 4999
-  name              = "${local.name}-frontend"
-  namespace         = "/"
-  rest_host         = "${local.name}.${var.domain}"
-  rest_namespace    = "/server"
-  security_group_id = data.aws_security_group.selected.id
-  subnets           = data.aws_subnets.selected.ids
-  vpc_id            = data.aws_vpc.selected.id
+  cluster_id            = data.aws_ecs_cluster.selected.id
+  host                  = "${local.name}.${var.domain}"
+  iam_ecs_task_role_arn = data.aws_iam_role.ecs_task_role.arn
+  img                   = var.frontend_img
+  listener_arn          = data.aws_lb_listener.selected.arn
+  listener_priority     = 4999
+  name                  = "${local.name}-frontend"
+  namespace             = "/"
+  rest_host             = "${local.name}.${var.domain}"
+  rest_namespace        = "/server"
+  security_group_id     = data.aws_security_group.selected.id
+  subnets               = data.aws_subnets.selected.ids
+  vpc_id                = data.aws_vpc.selected.id
 
   custom_env_cfg = {
     "DSPACE_CACHE_SERVERSIDE_ANONYMOUSCACHE_MAX" = "500"

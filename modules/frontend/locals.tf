@@ -10,6 +10,7 @@ locals {
   custom_secrets_cfg       = var.custom_secrets_cfg
   env                      = var.env
   host                     = var.host
+  iam_ecs_task_role_arn    = var.iam_ecs_task_role_arn
   img                      = var.img
   instances                = var.instances
   listener_arn             = var.listener_arn
