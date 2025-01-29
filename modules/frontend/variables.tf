@@ -79,7 +79,7 @@ variable "listener_priority" {
 
 variable "log_driver" {
   description = "Log Driver currently supported none and awslogs"
-  default = "awslogs"
+  default     = "awslogs"
 }
 
 variable "memory" {
