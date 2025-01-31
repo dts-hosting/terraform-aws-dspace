@@ -77,7 +77,7 @@
     },
     %{ endif ~}
     "logConfiguration": {
-       %{ if capacity_provider == "FARGATE" }
+       %{ if capacity_provider == "FARGATE" || log_driver == "awslogs" }
           "logDriver": "awslogs",
           "options": {
             "awslogs-group": "${log_group}",
@@ -85,16 +85,7 @@
             "awslogs-stream-prefix": "dspace"
           }
        %{ else }
-          %{ if log_driver == "awslogs" }
-            "logDriver": "${log_driver}",
-            "options": {
-              "awslogs-group": "${log_group}",
-              "awslogs-region": "${region}",
-              "awslogs-stream-prefix": "dspace"
-            }
-          %{ else }
-            "logDriver": "${log_driver}"
-          %{ endif ~}
+          "logDriver": "none"
         %{ endif ~}
     }
   }
