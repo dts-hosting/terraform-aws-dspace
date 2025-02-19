@@ -55,6 +55,7 @@ locals {
     env                = local.env
     bind               = "0.0.0.0"
     img                = local.img
+    log_driver         = var.log_driver
     log_group          = aws_cloudwatch_log_group.this.name
     name               = local.name
     namespace          = local.namespace

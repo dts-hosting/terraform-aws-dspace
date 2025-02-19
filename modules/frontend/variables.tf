@@ -77,6 +77,16 @@ variable "listener_priority" {
   description = "ALB (https) listener priority (actual value is: int * 10 + 1)"
 }
 
+variable "log_driver" {
+  description = "Log Driver currently supported none and awslogs"
+  default     = "awslogs"
+
+  validation {
+    condition     = contains(["awslogs", "none"], var.log_driver)
+    error_message = "The log_driver variable must be either awslog or none."
+  }
+}
+
 variable "memory" {
   description = "Task level memory allocation (hard limit)"
   default     = 1024
