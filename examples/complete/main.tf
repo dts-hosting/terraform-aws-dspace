@@ -137,7 +137,7 @@ module "frontend" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.18.1"
+  version = "5.19.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -295,7 +295,7 @@ module "alb" {
 
 module "efs" {
   source  = "terraform-aws-modules/efs/aws"
-  version = "1.6.5"
+  version = "1.7.0"
 
   # File system
   name      = local.name
