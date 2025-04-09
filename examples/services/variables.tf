@@ -2,6 +2,10 @@ variable "backend_img" {
   default = "dspace/dspace:dspace-7_x"
 }
 
+variable "backend_startup_cmd" {
+  default = "java -jar $${dspace__P__dir}/webapps/server-boot.jar --dspace.dir=$${dspace__P__dir}"
+}
+
 variable "domain" {
   default = "dspace.org"
 }
@@ -39,6 +43,7 @@ variable "db_password_param" {}
 variable "db_username_param" {}
 variable "efs_name" {}
 variable "lb_name" {}
+variable "rest_discovery_namespace" {}
 variable "security_group_name" {}
 variable "solr_discovery_namespace" {}
 variable "subnet_type" {}
@@ -77,6 +82,11 @@ data "aws_security_group" "selected" {
     name   = "tag:Name"
     values = [var.security_group_name]
   }
+}
+
+data "aws_service_discovery_dns_namespace" "rest" {
+  name = var.rest_discovery_namespace
+  type = "DNS_PRIVATE"
 }
 
 data "aws_service_discovery_dns_namespace" "solr" {
