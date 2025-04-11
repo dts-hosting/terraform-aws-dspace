@@ -31,7 +31,7 @@ resource "aws_cloudwatch_event_target" "this" {
   "containerOverrides": [
     {
       "name": "cli",
-      "command": ${jsonencode(each.value.args)}
+      "command": ["${join(" ", each.value.args)}"]
     }
   ]
 }

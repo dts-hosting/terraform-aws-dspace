@@ -4,6 +4,7 @@
     "image": "${img}",
     "networkMode": "awsvpc",
     "essential": true,
+    "entryPoint": ["/bin/bash", "-c"],
     "environment": [
       %{ for name, value in custom_env_cfg }
       {
