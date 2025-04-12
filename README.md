@@ -37,7 +37,7 @@ module "solr" {
   img                  = var.solr_img # DSpace Solr docker image
   name                 = "demo-solr" # Name for resources created by the module (must be unique)
   security_group_id    = var.security_group_id # Security group id (must allow 8983 within VPC)
-  service_discovery_id = aws_service_discovery_private_dns_namespace.this.id
+  service_discovery_id = aws_service_discovery_private_dns_namespace.solr.id
   subnets              = var.subnets # Subnet ids (requires route to internet for downloading images)
   vpc_id               = var.vpc_id # VPC id
 
@@ -63,25 +63,26 @@ Configuration for the DSpace backend:
 module "backend" {
   source = "github.com/dts-hosting/terraform-aws-dspace//modules/backend"
 
-  backend_url       = "https://example.dspace.org/server"
-  cluster_id        = var.cluster_id
-  db_host           = var.db_host # db hostname
-  db_name           = var.db_name # db name (will be created if not exists)
-  db_password_arn   = var.db_password_param # SSM param name containing password
-  db_username_arn   = var.db_username_param # SSM param name containing username
-  efs_id            = var.efs_id
-  frontend_url      = "https://example.dspace.org"
-  host              = "example.dspace.org"
-  img               = var.backend_img
-  listener_arn      = var.listener_arn
-  listener_priority = 1
-  name              = "demo-backend"
-  namespace         = "/server"
-  security_group_id = data.aws_security_group.selected.id
-  solr_url          = "http://demo-solr.dspace.solr:8983/solr"
-  subnets           = var.subnets
-  timezone          = "America/New_York"
-  vpc_id            = var.vpc_id
+  backend_url          = "https://example.dspace.org/server"
+  cluster_id           = var.cluster_id
+  db_host              = var.db_host # db hostname
+  db_name              = var.db_name # db name (will be created if not exists)
+  db_password_arn      = var.db_password_param # SSM param name containing password
+  db_username_arn      = var.db_username_param # SSM param name containing username
+  efs_id               = var.efs_id
+  frontend_url         = "https://example.dspace.org"
+  host                 = "example.dspace.org"
+  img                  = var.backend_img
+  listener_arn         = var.listener_arn
+  listener_priority    = 1
+  name                 = "demo-backend"
+  namespace            = "/server"
+  security_group_id    = data.aws_security_group.selected.id
+  service_discovery_id = aws_service_discovery_private_dns_namespace.rest.id
+  solr_url             = "http://demo-solr.dspace.solr:8983/solr"
+  subnets              = var.subnets
+  timezone             = "America/New_York"
+  vpc_id               = var.vpc_id
 
   tags = {
     BackendUrl = "https://example.dspace.org/server/api"

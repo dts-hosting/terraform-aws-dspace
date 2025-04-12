@@ -84,7 +84,28 @@ resource "aws_ecs_service" "this" {
     }
   }
 
+  service_registries {
+    container_name = local.network_mode == "awsvpc" ? null : "rest"
+    container_port = local.network_mode == "awsvpc" ? null : local.port
+    registry_arn   = aws_service_discovery_service.this.arn
+  }
+
   tags = local.tags
+}
+
+resource "aws_service_discovery_service" "this" {
+  name = local.name
+
+  dns_config {
+    namespace_id = local.service_discovery_id
+
+    dns_records {
+      ttl  = 10
+      type = local.service_discovery_dns_type
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
 }
 
 resource "aws_efs_access_point" "assetstore" {

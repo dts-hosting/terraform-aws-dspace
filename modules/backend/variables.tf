@@ -158,6 +158,14 @@ variable "security_group_id" {
   description = "Security group id"
 }
 
+variable "service_discovery_id" {
+  description = "Service discovery id"
+}
+
+variable "service_discovery_dns_type" {
+  default = "A"
+}
+
 variable "solr_url" {
   description = "DSpace solr url"
 }

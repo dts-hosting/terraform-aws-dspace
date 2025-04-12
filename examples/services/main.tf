@@ -82,7 +82,9 @@ module "backend" {
   name                  = "${local.name}-backend"
   namespace             = "/server"
   security_group_id     = data.aws_security_group.selected.id
+  service_discovery_id  = data.aws_service_discovery_dns_namespace.rest.id
   solr_url              = "http://${local.name}-solr.${var.solr_discovery_namespace}:8983/solr"
+  startup_dspace_cmd    = var.backend_startup_cmd
   subnets               = data.aws_subnets.selected.ids
   tasks = {
     reindex = {
@@ -92,6 +94,10 @@ module "backend" {
   }
   timezone = "America/New_York"
   vpc_id   = data.aws_vpc.selected.id
+
+  custom_env_cfg = {
+    "dspace__P__server__P__ssr__P__url" = "http://${local.name}-backend.${var.rest_discovery_namespace}:8080/server"
+  }
 }
 
 module "frontend" {
@@ -112,27 +118,29 @@ module "frontend" {
   vpc_id                = data.aws_vpc.selected.id
 
   custom_env_cfg = {
-    "DSPACE_CACHE_SERVERSIDE_ANONYMOUSCACHE_MAX" = "500"
+    "DSPACE_CACHE_SERVERSIDE_ANONYMOUSCACHE_MAX" = "500",
+    "DSPACE_REST_SSRBASEURL"                     = "http://${local.name}-backend.${var.rest_discovery_namespace}:8080/server"
   }
 
   robots_txt = file("${path.module}/robots.txt")
 }
 
-module "certbot" {
-  source = "../../modules/certbot"
+# Optional: not needed for domains pre-registered in ACM
+# module "certbot" {
+#   source = "../../modules/certbot"
 
-  capacity_provider = "FARGATE_SPOT"
-  cluster_id        = data.aws_ecs_cluster.selected.id
-  email             = "no-reply@${var.domain}"
-  enabled           = true
-  hostnames         = ["${local.name}.${var.domain}"]
-  lb_name           = var.lb_name
-  listener_arn      = data.aws_lb_listener.http.arn
-  name              = "${local.name}-certbot"
-  security_group_id = data.aws_security_group.selected.id
-  subnets           = data.aws_subnets.selected.ids
-  vpc_id            = data.aws_vpc.selected.id
-}
+#   capacity_provider = "FARGATE_SPOT"
+#   cluster_id        = data.aws_ecs_cluster.selected.id
+#   email             = "no-reply@${var.domain}"
+#   enabled           = true
+#   hostnames         = ["${local.name}.${var.domain}"]
+#   lb_name           = var.lb_name
+#   listener_arn      = data.aws_lb_listener.http.arn
+#   name              = "${local.name}-certbot"
+#   security_group_id = data.aws_security_group.selected.id
+#   subnets           = data.aws_subnets.selected.ids
+#   vpc_id            = data.aws_vpc.selected.id
+# }
 
 ################################################################################
 # Supporting resources
