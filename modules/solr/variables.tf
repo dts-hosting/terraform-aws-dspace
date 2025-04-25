@@ -121,6 +121,16 @@ variable "solr_java_mem" {
   default     = 768
 }
 
+variable "solr_modules" {
+  description = "Values for SOLR_MODULES"
+  default     = "analysis-extras"
+}
+
+variable "solr_opts" {
+  description = "Values for SOLR_OPTS"
+  default     = "-Dsolr.lock.type=native"
+}
+
 variable "subnets" {
   description = "Subnets"
 }

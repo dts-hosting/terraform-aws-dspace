@@ -11,7 +11,6 @@ locals {
   iam_ecs_task_role_arn      = var.iam_ecs_task_role_arn
   img                        = var.img
   instances                  = var.instances
-  lock_type                  = "native"
   log_prefix                 = var.log_prefix
   memory                     = var.memory
   name                       = var.name
@@ -23,6 +22,8 @@ locals {
   service_discovery_id       = var.service_discovery_id
   service_discovery_dns_type = var.service_discovery_dns_type
   solr_java_mem              = var.solr_java_mem
+  solr_modules               = var.solr_modules
+  solr_opts                  = var.solr_opts
   subnets                    = var.subnets
   swap_size                  = 1024
   tags                       = var.tags
@@ -35,7 +36,6 @@ locals {
     container_port    = local.port
     data              = local.data_volume
     img               = local.img
-    lock_type         = local.lock_type
     log_group         = aws_cloudwatch_log_group.this.name
     log_prefix        = local.log_prefix
     memory            = local.solr_java_mem
@@ -43,6 +43,8 @@ locals {
     name              = local.name
     port              = local.port
     region            = data.aws_region.current.name
+    solr_modules      = local.solr_modules
+    solr_opts         = local.solr_opts
     swap_size         = local.swap_size
   }
 }
