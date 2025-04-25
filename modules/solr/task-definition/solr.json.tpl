@@ -16,8 +16,12 @@
         "value": "-Xms${memory}m -Xmx${memory}m"
       },
       {
+        "name": "SOLR_MODULES",
+        "value": "${solr_modules}"
+      },
+      {
         "name": "SOLR_OPTS",
-        "value": "-Dsolr.lock.type=${lock_type}"
+        "value": "${solr_opts}"
       }
     ],
     "portMappings": [
