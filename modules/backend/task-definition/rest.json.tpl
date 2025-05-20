@@ -2,7 +2,7 @@
   {
     "name"  : "createdb",
     "image" : "postgres:latest",
-    repositoryCredentials": {
+    "repositoryCredentials": {
       "credentialsParameter": "arn:aws:secretsmanager:us-east-2:590322387960:secret:dsd-docker-login-atHjXK"
     },
     "networkMode": "${network_mode}",
@@ -32,7 +32,7 @@
   {
     "name"  : "pgcrypto",
     "image" : "postgres:latest",
-    repositoryCredentials": {
+    "repositoryCredentials": {
       "credentialsParameter": "arn:aws:secretsmanager:us-east-2:590322387960:secret:dsd-docker-login-atHjXK"
     },
     "networkMode": "${network_mode}",
