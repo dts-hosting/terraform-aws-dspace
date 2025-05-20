@@ -1,10 +1,7 @@
 [
   {
     "name"  : "createdb",
-    "image" : "postgres:latest",
-    "repositoryCredentials": {
-      "credentialsParameter": "arn:aws:secretsmanager:us-east-2:590322387960:secret:dsd-docker-login-atHjXK"
-    },
+    "image" : "public.ecr.aws/docker/library/postgres:16",
     "networkMode": "${network_mode}",
     "essential": false,
     "command" : [
@@ -31,10 +28,7 @@
   },
   {
     "name"  : "pgcrypto",
-    "image" : "postgres:latest",
-    "repositoryCredentials": {
-      "credentialsParameter": "arn:aws:secretsmanager:us-east-2:590322387960:secret:dsd-docker-login-atHjXK"
-    },
+    "image" : "public.ecr.aws/docker/library/postgres:16",
     "networkMode": "${network_mode}",
     "essential": false,
     "command" : [
