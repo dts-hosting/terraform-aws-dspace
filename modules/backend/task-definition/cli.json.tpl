@@ -50,7 +50,7 @@
       },
       {
         "name": "JAVA_OPTS",
-        "value": "-XX:+PerfDisableSharedMem -Xmx${memory}m -Xms${memory}m"
+        "value": "-XX:+PerfDisableSharedMem -Xmx${cli_memory}m -Xms${cli_memory}m"
       },
       {
         "name": "LOGGING_CONFIG",

@@ -72,7 +72,7 @@ variable "dspace_name" {
 }
 
 variable "dspace_xmx" {
-  description = "Container level memory allocation for DSpace (rest and cli)"
+  description = "Container level memory allocation for DSpace server"
   default     = 2048
 }
 
