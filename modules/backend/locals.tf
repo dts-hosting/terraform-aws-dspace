@@ -17,6 +17,7 @@ locals {
   db_username_arn            = var.db_username_arn
   dspace_name                = var.dspace_name
   dspace_xmx                 = var.dspace_xmx
+  dspace_xmx_cli             = local.cli_memory - 512
   efs_id                     = var.efs_id
   extra_policy_arns          = var.extra_policy_arns
   frontend_url               = var.frontend_url
@@ -54,6 +55,7 @@ locals {
     assetstore         = local.assetstore_volume
     backend_url        = local.backend_url
     capacity_provider  = local.capacity_provider
+    cli_memory         = local.dspace_xmx_cli
     ctqueues           = local.ctqueues_volume
     custom_env_cfg     = local.custom_env_cfg
     custom_secrets_cfg = local.custom_secrets_cfg
