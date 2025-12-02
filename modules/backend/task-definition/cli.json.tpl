@@ -84,7 +84,7 @@
       },
       {
         "sourceVolume": "${tmp}",
-        "containerPath": "tmp"
+        "containerPath": "/tmp"
       }
     ],
     "logConfiguration": {

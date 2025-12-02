@@ -161,7 +161,7 @@
       },
       {
         "sourceVolume": "${tmp}",
-        "containerPath": "tmp"
+        "containerPath": "/tmp"
       }
     ],
     %{ if capacity_provider == "EC2" }
