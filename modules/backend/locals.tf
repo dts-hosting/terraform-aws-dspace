@@ -1,5 +1,4 @@
 locals {
-  assetstore_volume          = "${local.name}-assetstore"
   assign_public_ip           = var.assign_public_ip
   backend_url                = var.backend_url
   capacity_provider          = var.capacity_provider
@@ -53,7 +52,6 @@ locals {
   vpc_id                     = var.vpc_id
 
   task_config = {
-    assetstore         = local.assetstore_volume
     backend_url        = local.backend_url
     capacity_provider  = local.capacity_provider
     cli_memory         = local.dspace_xmx_cli

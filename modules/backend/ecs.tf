@@ -19,19 +19,6 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = templatefile("${path.module}/task-definition/${each.key}.json.tpl", local.task_config)
 
   volume {
-    name = local.assetstore_volume
-
-    efs_volume_configuration {
-      file_system_id     = local.efs_id
-      transit_encryption = "ENABLED"
-
-      authorization_config {
-        access_point_id = aws_efs_access_point.assetstore.id
-      }
-    }
-  }
-
-  volume {
     name = local.ctqueues_volume
 
     efs_volume_configuration {
@@ -118,19 +105,6 @@ resource "aws_service_discovery_service" "this" {
     }
 
     routing_policy = "MULTIVALUE"
-  }
-}
-
-resource "aws_efs_access_point" "assetstore" {
-  file_system_id = local.efs_id
-
-  root_directory {
-    path = "/${local.assetstore_volume}"
-    creation_info {
-      owner_gid   = 1001
-      owner_uid   = 1001
-      permissions = "755"
-    }
   }
 }
 
