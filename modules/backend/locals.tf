@@ -49,6 +49,7 @@ locals {
   target_type                = var.target_type
   tasks                      = var.tasks
   timezone                   = var.timezone
+  tmp_volume                 = "${local.name}-tmp"
   vpc_id                     = var.vpc_id
 
   task_config = {
@@ -83,5 +84,6 @@ locals {
     startup_script     = local.startup_script
     swap_size          = local.swap_size
     timezone           = local.timezone
+    tmp                = local.tmp_volume
   }
 }

@@ -85,6 +85,10 @@
       {
         "sourceVolume": "${ctqueues}",
         "containerPath": "${dspace_dir}/ctqueues"
+      },
+      {
+        "sourceVolume": "${tmp}",
+        "containerPath": "tmp"
       }
     ],
     "logConfiguration": {
