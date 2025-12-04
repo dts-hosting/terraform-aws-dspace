@@ -156,12 +156,12 @@
     ],
     "mountPoints": [
       {
-        "sourceVolume": "${assetstore}",
-        "containerPath": "${dspace_dir}/assetstore"
-      },
-      {
         "sourceVolume": "${ctqueues}",
         "containerPath": "${dspace_dir}/ctqueues"
+      },
+      {
+        "sourceVolume": "${tmp}",
+        "containerPath": "/tmp"
       }
     ],
     %{ if capacity_provider == "EC2" }
