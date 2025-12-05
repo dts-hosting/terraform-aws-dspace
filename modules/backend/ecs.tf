@@ -30,19 +30,6 @@ resource "aws_ecs_task_definition" "this" {
       }
     }
   }
-
-  volume {
-    name = local.tmp_volume
-
-    efs_volume_configuration {
-      file_system_id     = local.efs_id
-      transit_encryption = "ENABLED"
-
-      authorization_config {
-        access_point_id = aws_efs_access_point.tmp.id
-      }
-    }
-  }
 }
 
 resource "aws_ecs_service" "this" {
@@ -113,19 +100,6 @@ resource "aws_efs_access_point" "ctqueues" {
 
   root_directory {
     path = "/${local.ctqueues_volume}"
-    creation_info {
-      owner_gid   = 1001
-      owner_uid   = 1001
-      permissions = "755"
-    }
-  }
-}
-
-resource "aws_efs_access_point" "tmp" {
-  file_system_id = local.efs_id
-
-  root_directory {
-    path = "/${local.tmp_volume}"
     creation_info {
       owner_gid   = 1001
       owner_uid   = 1001
