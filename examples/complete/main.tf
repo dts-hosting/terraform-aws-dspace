@@ -252,7 +252,7 @@ module "dspace_sg" {
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "10.3.1"
+  version = "10.4.0"
 
   name               = local.name
   load_balancer_type = "application"
@@ -360,7 +360,7 @@ module "efs" {
 
 module "ecs" {
   source  = "terraform-aws-modules/ecs/aws"
-  version = "6.10.0"
+  version = "6.11.0"
 
   cluster_name = local.name
 
@@ -383,7 +383,7 @@ module "ecs" {
 
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.13.1"
+  version = "7.0.0"
 
   identifier = local.name
 
