@@ -5,11 +5,15 @@ updates:
     directory: /.github/workflows
     schedule:
       interval: weekly
+    groups:
+      all:
+        patterns:
+          - "*"
   - package-ecosystem: terraform
     directory: /examples/complete
     schedule:
       interval: monthly
     groups:
-      modules:
+      all:
         patterns:
-          - terraform-aws-modules*
+          - "*"
