@@ -119,8 +119,8 @@ resource "aws_lb_listener_rule" "this" {
     type = "url-rewrite"
     url_rewrite_config {
       rewrite {
-        regex   = "^/(jspui|xmlui)(/.*$)"
-        replace = "$2"
+        regex   = "^${local.namespace}(jspui|xmlui)/?(.*)$"
+        replace = "${local.namespace}$2"
       }
     }
   }
