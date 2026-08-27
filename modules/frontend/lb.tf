@@ -113,4 +113,15 @@ resource "aws_lb_listener_rule" "this" {
       values = ["${local.namespace}*"]
     }
   }
+
+  # remove old ui segments from path
+  transform {
+    type = "url-rewrite"
+    url_rewrite_config {
+      rewrite {
+        regex   = "^/(jspui|xmlui)(/.*$)"
+        replace = "$2"
+      }
+    }
+  }
 }
