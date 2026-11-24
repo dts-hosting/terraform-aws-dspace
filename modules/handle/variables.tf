@@ -9,6 +9,11 @@ variable "cpu" {
   default     = 256
 }
 
+variable "cpu_architecture" {
+  description = "The cpu architecture"
+  default     = "ARM64"
+}
+
 variable "contact_email" {
   description = "Contact email address"
 }

@@ -4,6 +4,7 @@ locals {
   contact_email                   = var.contact_email
   contact_name                    = var.contact_name
   cpu                             = var.cpu
+  cpu_architecture                = var.cpu_architecture
   host_ip                         = var.host_ip
   img                             = var.img
   instances                       = var.instances
