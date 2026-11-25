@@ -8,6 +8,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn            = aws_iam_role.this.arn
 
   container_definitions = templatefile("${path.module}/task-definition/handle.json.tpl", local.task_config)
+
+  dynamic "runtime_platform" {
+    for_each = local.requires_compatibilities[0] == "FARGATE" ? [1] : []
+    content {
+      cpu_architecture        = local.cpu_architecture
+      operating_system_family = "LINUX"
+    }
+  }
 }
 
 resource "aws_ecs_service" "this" {
